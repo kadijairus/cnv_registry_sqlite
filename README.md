@@ -1,4 +1,4 @@
-# CNV register
+# CNV registry
 
 Desktop application (Python, Tkinter, SQLite) for managing copy number variant (CNV) data.
 
