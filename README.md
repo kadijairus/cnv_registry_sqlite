@@ -16,7 +16,8 @@ Töölaua rakendus, mis kasutab Pythonit, Tkinterit ja SQLite'i Koopiaarvu muutu
     ```bash
     python cnv_register_db.py
     ```
-    *   See loob (või kirjutab üle olemasoleva) `cnv_register.db` faili, kasutades `Registrid_cleaned.sql` failis olevat skeemi.
+    *   See loob `cnv_register.db` faili kohalikule kettale (`C:\Users\<kasutaja>\cnv_register\`), kasutades `Registrid_cleaned.sql` failis olevat skeemi.
+    *   Kui andmebaas on juba olemas, küsitakse kinnitust (`JAH`) ja enne ülekirjutamist tehakse varukoopia.
 3.  **Rakenduse käivitamine:** Käivita põhirakenduse skript:
     ```bash
     python cnv_admin_gui.py
@@ -30,6 +31,10 @@ Töölaua rakendus, mis kasutab Pythonit, Tkinterit ja SQLite'i Koopiaarvu muutu
 
 ## Märkused
 
-*   **Andmebaasi lähtestamine:** Uuesti alustamiseks käivita `python cnv_register_db.py`. Olemasolev `cnv_register.db` fail kustutatakse ja luuakse uuesti.
+*   **Andmebaasi lähtestamine:** Uuesti alustamiseks käivita `python cnv_register_db.py`. Olemasolev `cnv_register.db` fail kustutatakse pärast kinnitust ja varukoopiat ning luuakse uuesti.
+*   **Varukoopiad:** `cnv_backup.py` teeb kontrollitud varukoopia kausta `U:\cnv_register_backups` (muudetav failis `BACKUP_DIR`).
+    *   Automaatselt: rakenduse sulgemisel üks kord päevas ja enne andmebaasi ülekirjutamist.
+    *   Käsitsi: `python cnv_backup.py`.
+    *   Alles hoitakse 30 viimast koopiat ja iga kuu esimene koopia.
 *   **Versioonihaldus:** Ära lisa `cnv_register.db` faili Giti. Lisa `*.db` oma `.gitignore` faili.
 *   **Andmebaasi vaatamine (valikuline):** Faili `cnv_register.db` sisu saab vaadata mistahes standardse SQLite'i andmebaasibrauseriga (nt DB Browser for SQLite).

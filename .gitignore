@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# SQLite databases and backups (data stays out of git)
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Exports and input worksheets
+*.bed
+*.xlsx
+*.xls
+~$*
+
+# Editor / OS
+.vscode/
+.idea/
+Thumbs.db

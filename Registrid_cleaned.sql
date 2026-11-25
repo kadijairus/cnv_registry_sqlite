@@ -319,7 +319,7 @@ CREATE TABLE Kasutaja
 	CONSTRAINT FK_Kasutaja_Kasutaja_seisund FOREIGN KEY (kasutaja_seisund_kood) REFERENCES Kasutaja_seisund (kasutaja_seisund_kood) ON DELETE NO ACTION ON UPDATE Cascade,
 	CONSTRAINT AK_Kasutaja_meiliaadress_unikaalne UNIQUE (meiliaadress),
 	CHECK(length(trim(meiliaadress)) > 0 AND meiliaadress LIKE '_%@%._%' AND meiliaadress NOT LIKE '%@.%' AND meiliaadress NOT LIKE '%..%'),
-	CHECK(JULIANDAY(kasutaja_reg_aeg) IS NOT NULL AND kasutaja_reg_aeg BETWEEN DATE(CURRENT_DATE, '-7 days') AND CURRENT_DATE),
+	CHECK(JULIANDAY(kasutaja_reg_aeg) IS NOT NULL AND kasutaja_reg_aeg BETWEEN '2010-01-01' AND CURRENT_DATE),
 	CHECK(length(meiliaadress) <= 254),
 	CHECK(length(trim(parool)) >= 1 AND length(trim(parool)) < 30)
 )

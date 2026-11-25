@@ -7,6 +7,7 @@ from tkinter import ttk, messagebox, filedialog
 import sqlite3
 import traceback # For detailed error logging
 import cnv_register_db as db # Import the data access layer module
+import cnv_backup
 
 class CNVAdminApp:
     def __init__(self, root):
@@ -619,6 +620,8 @@ class CNVAdminApp:
         if messagebox.askokcancel("Välju", "Kas soovite kindlasti väljuda?"):
              if self.conn:
                  db.db_disconnect(self.conn) # Use disconnect function
+             if not cnv_backup.backup_if_due():
+                 messagebox.showwarning("Varukoopia", f"Varukoopiat ei õnnestunud teha kausta {cnv_backup.BACKUP_DIR}.")
              self.root.destroy()
 
 

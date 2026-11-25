@@ -9,7 +9,8 @@ import os
 import traceback # Keep for data access functions
 
 
-DB_FILE = "cnv_register.db"
+# Working DB on local disk (SQLite on a network drive risks corruption); backups go to U: (see cnv_backup.py)
+DB_FILE = os.path.join(os.path.expanduser("~"), "cnv_register", "cnv_register.db")
 # Input file for creating the database structure and content
 PREPARED_SQL_FILE = "Registrid_cleaned.sql"
 
@@ -28,6 +29,7 @@ def create_database_from_prepared_sql(db_path, prepared_sql_path):
 
     # Attempt to delete existing DB file
     try:
+        os.makedirs(os.path.dirname(os.path.abspath(db_path)), exist_ok=True)
         if os.path.exists(db_path):
             os.remove(db_path)
             print(f"  - Removed existing database file: {db_path}")
@@ -172,7 +174,17 @@ def get_analyys_seisund_nimi(cursor, analyys_id):
 
 # --- Main execution block ---
 if __name__ == "__main__":
+    import sys
+    import cnv_backup
     print("=" * 60)
+    if os.path.exists(DB_FILE):
+        print(f"WARNING: Database '{DB_FILE}' already exists and will be DELETED and rebuilt.")
+        if input("Type JAH to continue: ").strip() != "JAH":
+            print("Cancelled. Database was not changed.")
+            sys.exit(1)
+        if not cnv_backup.backup_database(DB_FILE, reason="before-rebuild"):
+            print("Backup failed - rebuild cancelled. Database was not changed.")
+            sys.exit(1)
     success = create_database_from_prepared_sql(DB_FILE, PREPARED_SQL_FILE)
     print("-" * 60)
     if success:
