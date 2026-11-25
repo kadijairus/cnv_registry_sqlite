@@ -6,10 +6,19 @@ import tkinter as tk
 from tkinter import ttk, messagebox, filedialog
 import sqlite3
 import traceback # For detailed error logging
-import cnv_register_db as db # Import the data access layer module
+from datetime import date
+import cnv_registry_db as db # Import the data access layer module
 import cnv_backup
 
 class CNVAdminApp:
+    # Estonian column headings shown in the CNV list (keys are DB column names)
+    COLUMN_HEADINGS = {
+        "cnv_id": "ID", "dna_code": "DNA kood", "chromosome_name": "Kromosoom",
+        "start_pos": "Algus", "end_pos": "Lõpp", "copy_number_value": "Koopiaarv",
+        "interpretation_name": "Tähendus", "inheritance_name": "Päritolu",
+        "cnv_status_name": "Seisund",
+    }
+
     def __init__(self, root):
         self.root = root
         self.root.title("CNV register - Administraatori vaade (sisse logitud)")
@@ -21,16 +30,16 @@ class CNVAdminApp:
         self.connect_to_database() # Initialize connection and cursor
 
         # --- Load Classifiers (Data for Comboboxes etc.) ---
-        self.kromosoomid = {}
-        self.koopiaarvud = {}
-        self.tahendused = {}
-        self.paritolud = {}
-        self.cnv_seisundid = {}
-        self.kromosoomid_rev = {}
-        self.koopiaarvud_rev = {}
-        self.tahendused_rev = {}
-        self.paritolud_rev = {}
-        self.cnv_seisundid_rev = {}
+        self.chromosomes = {}
+        self.copy_numbers = {}
+        self.interpretations = {}
+        self.inheritances = {}
+        self.cnv_statuses = {}
+        self.chromosomes_rev = {}
+        self.copy_numbers_rev = {}
+        self.interpretations_rev = {}
+        self.inheritances_rev = {}
+        self.cnv_statuses_rev = {}
 
         if self.conn and self.cursor:
             self.load_classifiers()
@@ -64,7 +73,7 @@ class CNVAdminApp:
     # --------------------------------------------------------------------------
 
     def connect_to_database(self):
-        """Attempts to connect to the database using the function from cnv_register_db."""
+        """Attempts to connect to the database using the function from cnv_registry_db."""
         print("Attempting to connect to database...")
         self.conn, self.cursor = db.db_connect()
         if not self.conn:
@@ -79,34 +88,34 @@ class CNVAdminApp:
              print("ERROR: Cannot load classifiers, no database cursor.")
              return
         try:
-            # Kromosoom
-            krom_data = db.get_active_classifications(self.cursor, 'Kromosoom', 'kromosoom_kood', 'kromosoom_nimi')
-            self.kromosoomid = {row['kromosoom_nimi']: row['kromosoom_kood'] for row in krom_data}
-            self.kromosoomid_rev = {v: k for k, v in self.kromosoomid.items()}
+            # chromosome
+            chrom_data = db.get_active_classifications(self.cursor, 'chromosome', 'chromosome_code', 'chromosome_name')
+            self.chromosomes = {row['chromosome_name']: row['chromosome_code'] for row in chrom_data}
+            self.chromosomes_rev = {v: k for k, v in self.chromosomes.items()}
 
-            # Koopiaarv (needs value and name)
-            koop_data = db.get_active_classifications(self.cursor, 'Koopiaarv', 'koopiaarv_kood', 'koopiaarv_nimi', other_cols=['koopiaarv_vaartus'])
-            self.koopiaarvud = {f"{row['koopiaarv_vaartus']} ({row['koopiaarv_nimi']})": row['koopiaarv_kood'] for row in koop_data}
-            self.koopiaarvud_rev = {v: k for k, v in self.koopiaarvud.items()}
+            # copy_number (needs value and name)
+            copy_number_data = db.get_active_classifications(self.cursor, 'copy_number', 'copy_number_code', 'copy_number_name', other_cols=['copy_number_value'])
+            self.copy_numbers = {f"{row['copy_number_value']} ({row['copy_number_name']})": row['copy_number_code'] for row in copy_number_data}
+            self.copy_numbers_rev = {v: k for k, v in self.copy_numbers.items()}
 
-            # Tahendus
-            tahendus_data = db.get_active_classifications(self.cursor, 'Tahendus', 'tahendus_kood', 'tahendus_nimi')
-            self.tahendused = {row['tahendus_nimi']: row['tahendus_kood'] for row in tahendus_data}
-            self.tahendused_rev = {v: k for k, v in self.tahendused.items()}
+            # interpretation
+            interpretation_data = db.get_active_classifications(self.cursor, 'interpretation', 'interpretation_code', 'interpretation_name')
+            self.interpretations = {row['interpretation_name']: row['interpretation_code'] for row in interpretation_data}
+            self.interpretations_rev = {v: k for k, v in self.interpretations.items()}
 
-            # Paritolu
-            paritolu_data = db.get_active_classifications(self.cursor, 'Paritolu', 'paritolu_kood', 'paritolu_nimi')
-            self.paritolud = {row['paritolu_nimi']: row['paritolu_kood'] for row in paritolu_data}
-            self.paritolud_rev = {v: k for k, v in self.paritolud.items()}
+            # inheritance
+            inheritance_data = db.get_active_classifications(self.cursor, 'inheritance', 'inheritance_code', 'inheritance_name')
+            self.inheritances = {row['inheritance_name']: row['inheritance_code'] for row in inheritance_data}
+            self.inheritances_rev = {v: k for k, v in self.inheritances.items()}
 
-            # CNV_seisund (Fetch all states, including inactive like 'artefakt')
+            # cnv_status (Fetch all states, including inactive like 'artefakt')
             try:
-                self.cursor.execute("SELECT CNV_seisund_kood, CNV_seisund_nimi FROM CNV_seisund ORDER BY CNV_seisund_nimi;")
-                all_seisund_data = self.cursor.fetchall()
-                self.cnv_seisundid = {row['CNV_seisund_nimi']: row['CNV_seisund_kood'] for row in all_seisund_data}
-                self.cnv_seisundid_rev = {v: k for k, v in self.cnv_seisundid.items()}
+                self.cursor.execute("SELECT cnv_status_code, cnv_status_name FROM cnv_status ORDER BY cnv_status_name;")
+                all_status_data = self.cursor.fetchall()
+                self.cnv_statuses = {row['cnv_status_name']: row['cnv_status_code'] for row in all_status_data}
+                self.cnv_statuses_rev = {v: k for k, v in self.cnv_statuses.items()}
             except sqlite3.Error as e:
-                 print(f"ERROR fetching all CNV_seisund: {e}")
+                 print(f"ERROR fetching all cnv_status: {e}")
                  messagebox.showerror("Klassifikaatorite viga", "Ei õnnestunud CNV seisundit laadida.")
 
             print("Classifiers loaded.")
@@ -136,35 +145,35 @@ class CNVAdminApp:
         row_num = 0
         # Row 0
         ttk.Label(form_frame, text="Analüüsi DNA kood:").grid(row=row_num, column=0, padx=(0,2), pady=2, sticky=tk.W)
-        self.dna_kood_entry = ttk.Entry(form_frame, width=15)
-        self.dna_kood_entry.grid(row=row_num, column=1, padx=2, pady=2, sticky=tk.W)
+        self.dna_code_entry = ttk.Entry(form_frame, width=15)
+        self.dna_code_entry.grid(row=row_num, column=1, padx=2, pady=2, sticky=tk.W)
         ttk.Label(form_frame, text="Kromosoom:").grid(row=row_num, column=2, padx=(10,2), pady=2, sticky=tk.W)
-        self.kromosoom_combo = ttk.Combobox(form_frame,
-                                            values=sorted(list(self.kromosoomid.keys()), key=lambda x: int(x) if x.isdigit() else ord(x[0])),
+        self.chromosome_combo = ttk.Combobox(form_frame,
+                                            values=sorted(list(self.chromosomes.keys()), key=lambda x: int(x) if x.isdigit() else ord(x[0])),
                                             width=5, state="readonly")
-        self.kromosoom_combo.grid(row=row_num, column=3, padx=2, pady=2, sticky=tk.W)
+        self.chromosome_combo.grid(row=row_num, column=3, padx=2, pady=2, sticky=tk.W)
         row_num += 1
         # Row 1
         ttk.Label(form_frame, text="Alguskoordinaat:").grid(row=row_num, column=0, padx=(0,2), pady=2, sticky=tk.W)
-        self.algus_entry = ttk.Entry(form_frame, width=15)
-        self.algus_entry.grid(row=row_num, column=1, padx=2, pady=2, sticky=tk.W)
+        self.start_entry = ttk.Entry(form_frame, width=15)
+        self.start_entry.grid(row=row_num, column=1, padx=2, pady=2, sticky=tk.W)
         ttk.Label(form_frame, text="Lõppkoordinaat:").grid(row=row_num, column=2, padx=(10,2), pady=2, sticky=tk.W)
-        self.lopp_entry = ttk.Entry(form_frame, width=15)
-        self.lopp_entry.grid(row=row_num, column=3, padx=2, pady=2, sticky=tk.W)
+        self.end_entry = ttk.Entry(form_frame, width=15)
+        self.end_entry.grid(row=row_num, column=3, padx=2, pady=2, sticky=tk.W)
         row_num += 1
         # Row 2
         ttk.Label(form_frame, text="Koopiaarv:").grid(row=row_num, column=0, padx=(0,2), pady=2, sticky=tk.W)
-        koopiaarv_sorted_keys = sorted(self.koopiaarvud.keys(), key=lambda x: int(x.split()[0]))
-        self.koopiaarv_combo = ttk.Combobox(form_frame, values=koopiaarv_sorted_keys, width=20, state="readonly")
-        self.koopiaarv_combo.grid(row=row_num, column=1, padx=2, pady=2, sticky=tk.W) # Removed columnspan
+        copy_number_sorted_keys = sorted(self.copy_numbers.keys(), key=lambda x: int(x.split()[0]))
+        self.copy_number_combo = ttk.Combobox(form_frame, values=copy_number_sorted_keys, width=20, state="readonly")
+        self.copy_number_combo.grid(row=row_num, column=1, padx=2, pady=2, sticky=tk.W) # Removed columnspan
         ttk.Label(form_frame, text="Tähendus:").grid(row=row_num, column=2, padx=(10,2), pady=2, sticky=tk.W)
-        self.tahendus_combo = ttk.Combobox(form_frame, values=sorted(list(self.tahendused.keys())), width=15, state="readonly")
-        self.tahendus_combo.grid(row=row_num, column=3, padx=2, pady=2, sticky=tk.W)
+        self.interpretation_combo = ttk.Combobox(form_frame, values=sorted(list(self.interpretations.keys())), width=15, state="readonly")
+        self.interpretation_combo.grid(row=row_num, column=3, padx=2, pady=2, sticky=tk.W)
         row_num += 1
         # Row 3
         ttk.Label(form_frame, text="Päritolu:").grid(row=row_num, column=0, padx=(0,2), pady=2, sticky=tk.W)
-        self.paritolu_combo = ttk.Combobox(form_frame, values=sorted(list(self.paritolud.keys())), width=15, state="readonly")
-        self.paritolu_combo.grid(row=row_num, column=1, padx=2, pady=2, sticky=tk.W)
+        self.inheritance_combo = ttk.Combobox(form_frame, values=sorted(list(self.inheritances.keys())), width=15, state="readonly")
+        self.inheritance_combo.grid(row=row_num, column=1, padx=2, pady=2, sticky=tk.W)
 
         # --- Action Buttons Frame ---
         button_frame = ttk.Frame(controls_frame)
@@ -173,21 +182,21 @@ class CNVAdminApp:
         self.add_button = ttk.Button(button_frame, text="Lisa CNV", command=self.add_cnv_gui)
         self.add_button.pack(fill=tk.X, pady=2)
         # Changed button text
-        self.update_button = ttk.Button(button_frame, text="Muuda CNVd", command=self.update_cnv_gui, state=tk.DISABLED)
+        self.update_button = ttk.Button(button_frame, text="Muuda CNV-d", command=self.update_cnv_gui, state=tk.DISABLED)
         self.update_button.pack(fill=tk.X, pady=2)
-        self.set_artefact_button = ttk.Button(button_frame, text="Märgi Artefaktiks", command=self.set_cnv_state_gui_artefact, state=tk.DISABLED)
+        self.set_artefact_button = ttk.Button(button_frame, text="Märgi artefaktiks", command=self.set_cnv_state_gui_artefact, state=tk.DISABLED)
         self.set_artefact_button.pack(fill=tk.X, pady=2)
-        self.set_active_button = ttk.Button(button_frame, text="Märgi Aktiivseks", command=self.set_cnv_state_gui_active, state=tk.DISABLED)
+        self.set_active_button = ttk.Button(button_frame, text="Märgi aktiivseks", command=self.set_cnv_state_gui_active, state=tk.DISABLED)
         self.set_active_button.pack(fill=tk.X, pady=2)
-        self.clear_button = ttk.Button(button_frame, text="Tühjenda Vorm", command=self.clear_form)
+        self.clear_button = ttk.Button(button_frame, text="Tühjenda vorm", command=self.clear_form)
         self.clear_button.pack(fill=tk.X, pady=2)
 
         # --- List View (Treeview) ---
         # Define ALL columns using DB names; this tuple is used consistently
         self.all_db_columns = (
-            "cnv_id", "DNA_kood", "kromosoom_nimi", "alguskoordinaat",
-            "loppkoordinaat", "koopiaarv_vaartus", "tahendus_nimi",
-            "paritolu_nimi", "CNV_seisund_nimi"
+            "cnv_id", "dna_code", "chromosome_name", "start_pos",
+            "end_pos", "copy_number_value", "interpretation_name",
+            "inheritance_name", "cnv_status_name"
         )
         # Create Treeview inside self.list_frame
         self.cnv_tree = ttk.Treeview(self.list_frame, columns=self.all_db_columns, show="headings")
@@ -195,18 +204,18 @@ class CNVAdminApp:
         # Configure ALL headings and columns, bind click for sorting
         for col_id in self.all_db_columns:
             # Bind heading click to sorting function
-            self.cnv_tree.heading(col_id, text=col_id,
+            self.cnv_tree.heading(col_id, text=self.COLUMN_HEADINGS.get(col_id, col_id),
                                   command=lambda c=col_id: self.sort_treeview_column(c))
             # Set widths, anchor, and stretch properties
             if col_id == "cnv_id": width = 0; anchor = tk.W; stretch = tk.NO # Hide cnv_id
-            elif col_id == "DNA_kood": width = 90; anchor = tk.W; stretch = tk.YES
-            elif col_id == "kromosoom_nimi": width = 50; anchor = tk.CENTER; stretch = tk.YES
-            elif col_id == "alguskoordinaat": width = 100; anchor = tk.E; stretch = tk.YES
-            elif col_id == "loppkoordinaat": width = 100; anchor = tk.E; stretch = tk.YES
-            elif col_id == "koopiaarv_vaartus": width = 60; anchor = tk.CENTER; stretch = tk.YES
-            elif col_id == "tahendus_nimi": width = 120; anchor = tk.W; stretch = tk.YES
-            elif col_id == "paritolu_nimi": width = 100; anchor = tk.W; stretch = tk.YES
-            elif col_id == "CNV_seisund_nimi": width = 80; anchor = tk.W; stretch = tk.YES
+            elif col_id == "dna_code": width = 90; anchor = tk.W; stretch = tk.YES
+            elif col_id == "chromosome_name": width = 50; anchor = tk.CENTER; stretch = tk.YES
+            elif col_id == "start_pos": width = 100; anchor = tk.E; stretch = tk.YES
+            elif col_id == "end_pos": width = 100; anchor = tk.E; stretch = tk.YES
+            elif col_id == "copy_number_value": width = 60; anchor = tk.CENTER; stretch = tk.YES
+            elif col_id == "interpretation_name": width = 120; anchor = tk.W; stretch = tk.YES
+            elif col_id == "inheritance_name": width = 100; anchor = tk.W; stretch = tk.YES
+            elif col_id == "cnv_status_name": width = 80; anchor = tk.W; stretch = tk.YES
             else: width = 80; anchor = tk.W; stretch = tk.YES # Default
             self.cnv_tree.column(col_id, width=width, anchor=anchor, stretch=stretch)
 
@@ -228,9 +237,9 @@ class CNVAdminApp:
         ttk.Label(list_control_frame, text="Kuva analüüsi DNA:").pack(side=tk.LEFT, padx=(0,2))
         self.view_dna_entry = ttk.Entry(list_control_frame, width=15)
         self.view_dna_entry.pack(side=tk.LEFT, padx=2)
-        ttk.Button(list_control_frame, text="Kuva Analüüsi CNVd", command=self.populate_cnv_list_by_analysis).pack(side=tk.LEFT, padx=5)
-        ttk.Button(list_control_frame, text="Kuva Kõik Aktiivsed", command=lambda: self.populate_cnv_list(view_type='active')).pack(side=tk.LEFT, padx=5)
-        ttk.Button(list_control_frame, text="Ekspordi Aktiivsed (BED)", command=self.export_active_cnvs).pack(side=tk.LEFT, padx=5)
+        ttk.Button(list_control_frame, text="Kuva analüüsi CNV-d", command=self.populate_cnv_list_by_analysis).pack(side=tk.LEFT, padx=5)
+        ttk.Button(list_control_frame, text="Kuva kõik aktiivsed", command=lambda: self.populate_cnv_list(view_type='active')).pack(side=tk.LEFT, padx=5)
+        ttk.Button(list_control_frame, text="Ekspordi aktiivsed (BED)", command=self.export_active_cnvs).pack(side=tk.LEFT, padx=5)
 
 
     # --------------------------------------------------------------------------
@@ -257,8 +266,8 @@ class CNVAdminApp:
         # Define a type-aware sorting key function based on column ID
         def sort_key(item):
             val = item[0] # The value from the column
-            numeric_cols = ['cnv_id', 'alguskoordinaat', 'loppkoordinaat', 'koopiaarv_vaartus']
-            chr_cols = ['kromosoom_nimi']
+            numeric_cols = ['cnv_id', 'start_pos', 'end_pos', 'copy_number_value']
+            chr_cols = ['chromosome_name']
 
             if col_id in numeric_cols:
                 try: # Attempt numeric sort, treat non-numeric/empty as very small
@@ -293,16 +302,16 @@ class CNVAdminApp:
     def clear_form(self):
         """Clears input fields and selection state."""
         self.selected_cnv_id = None
-        self.dna_kood_entry.config(state=tk.NORMAL) # Enable before clearing
-        self.dna_kood_entry.delete(0, tk.END)
-        self.algus_entry.delete(0, tk.END)
-        self.lopp_entry.delete(0, tk.END)
-        self.kromosoom_combo.set('')
-        self.koopiaarv_combo.set('')
-        self.tahendus_combo.set('')
-        self.paritolu_combo.set('')
+        self.dna_code_entry.config(state=tk.NORMAL) # Enable before clearing
+        self.dna_code_entry.delete(0, tk.END)
+        self.start_entry.delete(0, tk.END)
+        self.end_entry.delete(0, tk.END)
+        self.chromosome_combo.set('')
+        self.copy_number_combo.set('')
+        self.interpretation_combo.set('')
+        self.inheritance_combo.set('')
         # Reset DNA entry state based on whether a selection is active (it's not after clear)
-        # self.dna_kood_entry.config(state=tk.NORMAL) # Keep enabled for adding
+        # self.dna_code_entry.config(state=tk.NORMAL) # Keep enabled for adding
 
         # Clear Treeview selection
         selection = self.cnv_tree.selection()
@@ -328,19 +337,19 @@ class CNVAdminApp:
         if view_type == 'active':
             # Columns to display for the "All Active" view
             display_columns_subset = (
-                "DNA_kood", "kromosoom_nimi", "alguskoordinaat", "loppkoordinaat",
-                "koopiaarv_vaartus", "tahendus_nimi", "paritolu_nimi", "CNV_seisund_nimi"
+                "dna_code", "chromosome_name", "start_pos", "end_pos",
+                "copy_number_value", "interpretation_name", "inheritance_name", "cnv_status_name"
             ) # Exclude cnv_id from visible
             # Reset list frame title
-            self.list_frame.config(text="Aktiivsete CNVde Nimekiri") # More descriptive title
+            self.list_frame.config(text="Aktiivsete CNV-de nimekiri") # More descriptive title
             if cnvs is None:
                 cnvs = db.get_active_cnvs_display(self.cursor) # Fetches state too
         elif view_type == 'single_analysis':
-            # Columns to display for the "Single Analysis" view (hide DNA_kood)
+            # Columns to display for the "Single Analysis" view (hide dna_code)
             display_columns_subset = (
-                "kromosoom_nimi", "alguskoordinaat", "loppkoordinaat", "koopiaarv_vaartus",
-                "tahendus_nimi", "paritolu_nimi", "CNV_seisund_nimi"
-            ) # Exclude cnv_id and DNA_kood from visible
+                "chromosome_name", "start_pos", "end_pos", "copy_number_value",
+                "interpretation_name", "inheritance_name", "cnv_status_name"
+            ) # Exclude cnv_id and dna_code from visible
         else:
             # Unknown view type
             print(f"Unknown view_type '{view_type}', showing empty.")
@@ -371,24 +380,24 @@ class CNVAdminApp:
     def populate_cnv_list_by_analysis(self):
         """Fetches and displays CNVs for a specific analysis DNA code."""
         if not self.cursor: messagebox.showerror("Viga", "Andmebaasi ühendust ei õnnestunud luua."); return
-        dna_kood = self.view_dna_entry.get().strip()
-        if not dna_kood: messagebox.showwarning("Sisend puudu", "Otsimiseks sisesta analüüsi kood."); return
+        dna_code = self.view_dna_entry.get().strip()
+        if not dna_code: messagebox.showwarning("Sisend puudu", "Otsimiseks sisesta analüüsi kood."); return
 
-        analysis_details = db.get_analysis_details_by_dna(self.cursor, dna_kood)
+        analysis_details = db.get_analysis_details_by_dna(self.cursor, dna_code)
         if not analysis_details:
-            messagebox.showinfo("Viga", f"Analüüsi koodiga '{dna_kood}' ei leitud.")
+            messagebox.showinfo("Viga", f"Analüüsi koodiga '{dna_code}' ei leitud.")
             self.list_frame.config(text="CNV nimekiri") # Reset title
             self.populate_cnv_list([], view_type='single_analysis')
             return
 
-        analyys_id = analysis_details['analyys_id']
-        print(f"Fetching CNVs for analysis ID: {analyys_id} (DNA: {dna_kood})")
-        cnvs = db.get_cnvs_for_analysis_display(self.cursor, analyys_id)
+        analysis_id = analysis_details['analysis_id']
+        print(f"Fetching CNVs for analysis ID: {analysis_id} (DNA: {dna_code})")
+        cnvs = db.get_cnvs_for_analysis_display(self.cursor, analysis_id)
         # Update list frame title BEFORE populating
-        self.list_frame.config(text=f"{dna_kood} CNV nimekiri")
+        self.list_frame.config(text=f"{dna_code} CNV nimekiri")
         # Call populate_cnv_list, passing data and view type
         self.populate_cnv_list(cnvs, view_type='single_analysis')
-        if not cnvs: messagebox.showinfo("Tulemusteta", f"Ei õnnestunud leida ühtegi CNVd DNA koodiga '{dna_kood}'.")
+        if not cnvs: messagebox.showinfo("Tulemusteta", f"Ei õnnestunud leida ühtegi CNV-d DNA koodiga '{dna_code}'.")
 
 
     def on_cnv_select(self, event):
@@ -410,22 +419,22 @@ class CNVAdminApp:
                 self.clear_form(); return
 
             # Fill form fields
-            self.dna_kood_entry.config(state=tk.NORMAL)
-            self.dna_kood_entry.delete(0, tk.END)
-            self.dna_kood_entry.insert(0, details['DNA_kood'])
-            self.dna_kood_entry.config(state=tk.DISABLED)
-            self.algus_entry.delete(0, tk.END); self.algus_entry.insert(0, details['alguskoordinaat'])
-            self.lopp_entry.delete(0, tk.END); self.lopp_entry.insert(0, details['loppkoordinaat'])
-            self.kromosoom_combo.set(self.kromosoomid_rev.get(details['kromosoom_kood'], ''))
-            self.koopiaarv_combo.set(self.koopiaarvud_rev.get(details['koopiaarv_kood'], ''))
-            self.tahendus_combo.set(self.tahendused_rev.get(details['tahendus_kood'], ''))
-            self.paritolu_combo.set(self.paritolud_rev.get(details['paritolu_kood'], ''))
+            self.dna_code_entry.config(state=tk.NORMAL)
+            self.dna_code_entry.delete(0, tk.END)
+            self.dna_code_entry.insert(0, details['dna_code'])
+            self.dna_code_entry.config(state=tk.DISABLED)
+            self.start_entry.delete(0, tk.END); self.start_entry.insert(0, details['start_pos'])
+            self.end_entry.delete(0, tk.END); self.end_entry.insert(0, details['end_pos'])
+            self.chromosome_combo.set(self.chromosomes_rev.get(details['chromosome_code'], ''))
+            self.copy_number_combo.set(self.copy_numbers_rev.get(details['copy_number_code'], ''))
+            self.interpretation_combo.set(self.interpretations_rev.get(details['interpretation_code'], ''))
+            self.inheritance_combo.set(self.inheritances_rev.get(details['inheritance_code'], ''))
 
             # Update button states
             self.add_button.config(state=tk.DISABLED)
-            current_state_kood = details['CNV_seisund_kood']
-            artefact_kood = self.cnv_seisundid.get('artefakt')
-            is_artefact = artefact_kood is not None and current_state_kood == artefact_kood
+            current_state_code = details['cnv_status_code']
+            artefact_code = self.cnv_statuses.get('artefakt')
+            is_artefact = artefact_code is not None and current_state_code == artefact_code
             self.update_button.config(state=tk.DISABLED if is_artefact else tk.NORMAL)
             self.set_artefact_button.config(state=tk.DISABLED if is_artefact else tk.NORMAL)
             self.set_active_button.config(state=tk.NORMAL if is_artefact else tk.DISABLED)
@@ -441,33 +450,33 @@ class CNVAdminApp:
         """Adds a new CNV via the GUI."""
         if not self.cursor or not self.conn: messagebox.showerror("Viga", "Ühendust andmebaasiga ei õnnestunud luua."); return
         # --- Read Data ---
-        dna_kood = self.dna_kood_entry.get().strip(); krom_nimi = self.kromosoom_combo.get()
-        koop_display_nimi = self.koopiaarv_combo.get(); tahendus_nimi = self.tahendus_combo.get()
-        paritolu_nimi = self.paritolu_combo.get(); algus_str = self.algus_entry.get().strip()
-        lopp_str = self.lopp_entry.get().strip()
+        dna_code = self.dna_code_entry.get().strip(); chrom_name = self.chromosome_combo.get()
+        copy_number_display_name = self.copy_number_combo.get(); interpretation_name = self.interpretation_combo.get()
+        inheritance_name = self.inheritance_combo.get(); start_str = self.start_entry.get().strip()
+        end_str = self.end_entry.get().strip()
         # --- Validate ---
-        if not all([dna_kood, krom_nimi, koop_display_nimi, tahendus_nimi, paritolu_nimi, algus_str, lopp_str]):
+        if not all([dna_code, chrom_name, copy_number_display_name, interpretation_name, inheritance_name, start_str, end_str]):
             messagebox.showwarning("Puuduv sisend", "Palun täida kõik väljad"); return
         try:
-            algus = int(algus_str); lopp = int(lopp_str)
-            if algus <= 0 or lopp <= 0 or algus >= lopp: raise ValueError("Coordinates must be positive integers and start < end.")
+            start = int(start_str); end = int(end_str)
+            if start <= 0 or end <= 0 or start >= end: raise ValueError("Coordinates must be positive integers and start < end.")
         except ValueError as e: messagebox.showwarning("Vale sisend", f"Viga koordinaatides: {e}"); return
-        analysis_details = db.get_analysis_details_by_dna(self.cursor, dna_kood)
-        if not analysis_details: messagebox.showwarning("Viga", f"Analüüsi koodiga '{dna_kood}' ei õnnestunud leida."); return
-        analyys_id = analysis_details['analyys_id']
-        krom_kood = self.kromosoomid.get(krom_nimi); koop_kood = self.koopiaarvud.get(koop_display_nimi)
-        tahendus_kood = self.tahendused.get(tahendus_nimi); paritolu_kood = self.paritolud.get(paritolu_nimi)
-        if not all([krom_kood, koop_kood, tahendus_kood, paritolu_kood]):
-             missing = [f"'{n}'" for n, k in [(krom_nimi, krom_kood), (koop_display_nimi, koop_kood), (tahendus_nimi, tahendus_kood), (paritolu_nimi, paritolu_kood)] if k is None]
+        analysis_details = db.get_analysis_details_by_dna(self.cursor, dna_code)
+        if not analysis_details: messagebox.showwarning("Viga", f"Analüüsi koodiga '{dna_code}' ei õnnestunud leida."); return
+        analysis_id = analysis_details['analysis_id']
+        chrom_code = self.chromosomes.get(chrom_name); copy_number_code = self.copy_numbers.get(copy_number_display_name)
+        interpretation_code = self.interpretations.get(interpretation_name); inheritance_code = self.inheritances.get(inheritance_name)
+        if not all([chrom_code, copy_number_code, interpretation_code, inheritance_code]):
+             missing = [f"'{n}'" for n, k in [(chrom_name, chrom_code), (copy_number_display_name, copy_number_code), (interpretation_name, interpretation_code), (inheritance_name, inheritance_code)] if k is None]
              messagebox.showerror("Sisemine viga", f"Ei õnnestunud koode leida: {', '.join(missing)}"); return
         # --- Add ---
-        print(f"Attempting to add CNV for analysis {analyys_id}...")
-        new_cnv_id = db.add_cnv(self.cursor, self.conn, analyys_id, krom_kood, algus, lopp, koop_kood, tahendus_kood, paritolu_kood)
+        print(f"Attempting to add CNV for analysis {analysis_id}...")
+        new_cnv_id = db.add_cnv(self.cursor, self.conn, analysis_id, chrom_code, start, end, copy_number_code, interpretation_code, inheritance_code)
         # --- Feedback & Refresh ---
         if new_cnv_id:
             messagebox.showinfo("CNV lisatud", f"CNV (ID: {new_cnv_id}) edukalt lisatud.")
             self.clear_form(); self.populate_cnv_list(view_type='active') # Show active list after add
-        else: messagebox.showerror("Andmebaasi viga", "Ei õnnestunud CNVd lisada. Kontrolli konsooli.")
+        else: messagebox.showerror("Andmebaasi viga", "Ei õnnestunud CNV-d lisada. Kontrolli konsooli.")
 
 
     def update_cnv_gui(self):
@@ -476,27 +485,27 @@ class CNVAdminApp:
          if not self.cursor or not self.conn: messagebox.showerror("Viga", "Andmebaasi ühendus puudub."); return
          if self.selected_cnv_id is None: messagebox.showwarning("Valik puudub", "Palun vali mõni CNV."); return
          # --- Read ---
-         krom_nimi = self.kromosoom_combo.get(); koop_display_nimi = self.koopiaarv_combo.get()
-         tahendus_nimi = self.tahendus_combo.get(); paritolu_nimi = self.paritolu_combo.get()
-         algus_str = self.algus_entry.get().strip(); lopp_str = self.lopp_entry.get().strip()
+         chrom_name = self.chromosome_combo.get(); copy_number_display_name = self.copy_number_combo.get()
+         interpretation_name = self.interpretation_combo.get(); inheritance_name = self.inheritance_combo.get()
+         start_str = self.start_entry.get().strip(); end_str = self.end_entry.get().strip()
          # --- Validate ---
-         if not all([krom_nimi, koop_display_nimi, tahendus_nimi, paritolu_nimi, algus_str, lopp_str]):
+         if not all([chrom_name, copy_number_display_name, interpretation_name, inheritance_name, start_str, end_str]):
              messagebox.showwarning("Sisend puudu", "Täida kõik kohustuslikud väljad!"); return
          try:
-             algus = int(algus_str); lopp = int(lopp_str)
-             if algus <= 0 or lopp <= 0 or algus >= lopp: raise ValueError("Coordinates must be positive and start < end.")
+             start = int(start_str); end = int(end_str)
+             if start <= 0 or end <= 0 or start >= end: raise ValueError("Coordinates must be positive and start < end.")
          except ValueError as e: messagebox.showwarning("Vale sisend", f"Viga koordinaatides: {e}"); return
-         krom_kood = self.kromosoomid.get(krom_nimi); koop_kood = self.koopiaarvud.get(koop_display_nimi)
-         tahendus_kood = self.tahendused.get(tahendus_nimi); paritolu_kood = self.paritolud.get(paritolu_nimi)
-         if not all([krom_kood, koop_kood, tahendus_kood, paritolu_kood]): messagebox.showerror("Sisemine viga", "Ei õnnestunud leida kõiki klassifikaatorite koode."); return
+         chrom_code = self.chromosomes.get(chrom_name); copy_number_code = self.copy_numbers.get(copy_number_display_name)
+         interpretation_code = self.interpretations.get(interpretation_name); inheritance_code = self.inheritances.get(inheritance_name)
+         if not all([chrom_code, copy_number_code, interpretation_code, inheritance_code]): messagebox.showerror("Sisemine viga", "Ei õnnestunud leida kõiki klassifikaatorite koode."); return
          # --- Update ---
          print(f"Attempting to update CNV ID: {self.selected_cnv_id}...")
-         success = db.update_cnv(self.cursor, self.conn, self.selected_cnv_id, krom_kood, algus, lopp, koop_kood, tahendus_kood, paritolu_kood)
+         success = db.update_cnv(self.cursor, self.conn, self.selected_cnv_id, chrom_code, start, end, copy_number_code, interpretation_code, inheritance_code)
          # --- Feedback & Refresh ---
          if success:
              messagebox.showinfo("CNV muudetud", f"CNV (ID: {self.selected_cnv_id}) edukalt muudetud.")
              self.clear_form(); self.populate_cnv_list(view_type='active') # Refresh active list
-         else: messagebox.showerror("Andmebaasi viga", "Ei õnnestunud CNVd muuta (vaata konsooli).")
+         else: messagebox.showerror("Andmebaasi viga", "Ei õnnestunud CNV-d muuta (vaata konsooli).")
 
 
     def set_cnv_state_gui(self, target_state_name):
@@ -504,20 +513,20 @@ class CNVAdminApp:
          """General function to change CNV state."""
          if not self.cursor or not self.conn: messagebox.showerror("Viga", "Andmebaasi ühendus puudub."); return
          if self.selected_cnv_id is None: messagebox.showwarning("Valik puudu", "Palun vali mõni CNV."); return
-         target_state_kood = self.cnv_seisundid.get(target_state_name)
-         if target_state_kood is None: messagebox.showerror("Sisemine viga", f"Seisundit '{target_state_name}' ei õnnestunud leida."); return
+         target_state_code = self.cnv_statuses.get(target_state_name)
+         if target_state_code is None: messagebox.showerror("Sisemine viga", f"Seisundit '{target_state_name}' ei õnnestunud leida."); return
          # --- Check analysis state if activating ---
          if target_state_name == 'aktiivne':
              cnv_details = db.get_cnv_details_for_edit(self.cursor, self.selected_cnv_id)
              if not cnv_details: messagebox.showerror("Viga", "CNV andmeid seisundi kontrolliks ei õnnestunud laadida."); return
-             analyys_id = cnv_details['analyys_id']
-             analyys_seisund_nimi = db.get_analyys_seisund_nimi(self.cursor, analyys_id)
-             if analyys_seisund_nimi is None: messagebox.showerror("Viga", f"Ei õnnestunud leida seisundi infot sellel analüüsil (ID: {analyys_id})."); return
-             if analyys_seisund_nimi == 'artefakt': # Ensure 'artefakt' matches DB value
-                  messagebox.showerror("Muutmine keelatud", f"Ei saa CNVd aktiivseks muuta: seotud analüüs (ID: {analyys_id}) on seisundis 'artefakt'."); return
+             analysis_id = cnv_details['analysis_id']
+             analysis_status_name = db.get_analysis_status_name(self.cursor, analysis_id)
+             if analysis_status_name is None: messagebox.showerror("Viga", f"Ei õnnestunud leida seisundi infot sellel analüüsil (ID: {analysis_id})."); return
+             if analysis_status_name == 'artefakt': # Ensure 'artefakt' matches DB value
+                  messagebox.showerror("Muutmine keelatud", f"Ei saa CNV-d aktiivseks muuta: seotud analüüs (ID: {analysis_id}) on seisundis 'artefakt'."); return
          # --- Change state ---
-         print(f"Attempting to set CNV ID {self.selected_cnv_id} state to '{target_state_name}' (kood: {target_state_kood})...")
-         success = db.update_cnv_state(self.cursor, self.conn, self.selected_cnv_id, target_state_kood)
+         print(f"Attempting to set CNV ID {self.selected_cnv_id} state to '{target_state_name}' (kood: {target_state_code})...")
+         success = db.update_cnv_state(self.cursor, self.conn, self.selected_cnv_id, target_state_code)
          # --- Feedback & Refresh ---
          if success:
               messagebox.showinfo("Õnnestus", f"CNV (ID: {self.selected_cnv_id}) uus seisund: {target_state_name}.")
@@ -535,13 +544,13 @@ class CNVAdminApp:
 
         active_cnvs = db.get_active_cnvs_display(self.cursor)
         if not active_cnvs:
-            messagebox.showinfo("Andmed puudu", "Ei leidnud aktiivseid CNVsid eksportimiseks.")
+            messagebox.showinfo("Andmed puudu", "Ei leidnud aktiivseid CNV-sid eksportimiseks.")
             return
 
         filepath = filedialog.asksaveasfilename(
             defaultextension=".bed",
             filetypes=[("BED files", "*.bed"), ("All files", "*.*")],
-            title="Save Active CNVs as..."
+            title="Salvesta aktiivsed CNV-d…"
         )
 
         if not filepath: return  # User cancelled
@@ -550,7 +559,8 @@ class CNVAdminApp:
         try:
             with open(filepath, 'w', encoding='utf-8') as f:
                 # --- Write BED Track Header ---
-                track_header = 'track db="hg38" name="GenK_aktiivsed_CNVd" description="Geneetikakeskuse aktiivsed CNV-d (GRCh38)" itemRgb="On"\n'
+                export_date = date.today().isoformat()
+                track_header = f'track db="hg38" name="cnv_registry_active" description="Active CNVs from local CNV registry, exported {export_date} (GRCh38)" itemRgb="On"\n'
                 f.write(track_header)
                 # --- End Header ---
 
@@ -559,15 +569,15 @@ class CNVAdminApp:
                     row_keys = cnv.keys()
                     try:
                         # --- Get data using dictionary-style access [] ---
-                        chrom_raw = cnv['kromosoom_nimi'] if 'kromosoom_nimi' in row_keys else ''
+                        chrom_raw = cnv['chromosome_name'] if 'chromosome_name' in row_keys else ''
                         chrom = f"chr{chrom_raw}" if chrom_raw else "chrNA"
 
                         try:
-                            start_1based = int(cnv['alguskoordinaat'])
+                            start_1based = int(cnv['start_pos'])
                         except (ValueError, TypeError, KeyError):
                             start_1based = 1
                         try:
-                            end_1based = int(cnv['loppkoordinaat'])
+                            end_1based = int(cnv['end_pos'])
                         except (ValueError, TypeError, KeyError):
                             end_1based = 1
 
@@ -575,15 +585,15 @@ class CNVAdminApp:
                         start_0based = max(0, start_1based - 1)
                         end_exclusive = end_1based
 
-                        # Create name field: Example uses DNA_kood - adjust if needed
-                        dna_kood = cnv['DNA_kood'] if 'DNA_kood' in row_keys else 'NA'
-                        name = f"{dna_kood}"
+                        # Create name field: Example uses dna_code - adjust if needed
+                        dna_code = cnv['dna_code'] if 'dna_code' in row_keys else 'NA'
+                        name = f"{dna_code}"
 
                         score = '0'  # Standard BED score, often 0 or 1000
                         strand = '.'  # CNVs usually don't have strand info
 
                         # Get RGB color
-                        rgb_color = cnv['RGB_varv'] if 'RGB_varv' in row_keys else '0,0,0'
+                        rgb_color = cnv['rgb_color'] if 'rgb_color' in row_keys else '0,0,0'
                         # Ensure it's in the correct comma-separated format
                         if not isinstance(rgb_color, str) or rgb_color.count(',') != 2:
                             rgb_color = '0,0,0'  # Default to black if format is wrong
@@ -607,7 +617,7 @@ class CNVAdminApp:
                         messagebox.showwarning("Rea viga",
                                                f"Viga CNV-ga millel on ID {current_id} eksportimisel: {item_e}. Katkestatud.")
 
-            messagebox.showinfo("Eksport edukas", f"{count} aktiivset CNVd eksporditud siia:\n{filepath}")
+            messagebox.showinfo("Eksport edukas", f"{count} aktiivset CNV-d eksporditud siia:\n{filepath}")
 
         except Exception as e:
             messagebox.showerror("Ekspordi viga", f"Tekkis viga faili kirjutamisel: {e}")

@@ -7,584 +7,584 @@
 
 /* Drop Tables */
 
-DROP TABLE IF EXISTS Plaadi_seisund
+DROP TABLE IF EXISTS plate_status
 ;
 
-DROP TABLE IF EXISTS Patsiendi_seisund
+DROP TABLE IF EXISTS patient_status
 ;
 
-DROP TABLE IF EXISTS Partii_seisund
+DROP TABLE IF EXISTS batch_status
 ;
 
-DROP TABLE IF EXISTS DNA_seisund
+DROP TABLE IF EXISTS dna_status
 ;
 
-DROP TABLE IF EXISTS Annotatsiooni_seisund
+DROP TABLE IF EXISTS annotation_status
 ;
 
-DROP TABLE IF EXISTS Kasutaja_seisund
+DROP TABLE IF EXISTS user_status
 ;
 
-DROP TABLE IF EXISTS Analyysi_seisund
+DROP TABLE IF EXISTS analysis_status
 ;
 
-DROP TABLE IF EXISTS CNV_seisund
+DROP TABLE IF EXISTS cnv_status
 ;
 
-DROP TABLE IF EXISTS Analyysi_tyyp
+DROP TABLE IF EXISTS analysis_type
 ;
 
-DROP TABLE IF EXISTS Annotatsiooni_tyyp
+DROP TABLE IF EXISTS annotation_type
 ;
 
-DROP TABLE IF EXISTS Kasutaja_roll
+DROP TABLE IF EXISTS user_role
 ;
 
-DROP TABLE IF EXISTS Positsioon_karbis
+DROP TABLE IF EXISTS box_position
 ;
 
-DROP TABLE IF EXISTS Tahendus
+DROP TABLE IF EXISTS interpretation
 ;
 
-DROP TABLE IF EXISTS Genoomi_versioon
+DROP TABLE IF EXISTS genome_build
 ;
 
-DROP TABLE IF EXISTS Server
+DROP TABLE IF EXISTS server
 ;
 
-DROP TABLE IF EXISTS Kromosoom
+DROP TABLE IF EXISTS chromosome
 ;
 
-DROP TABLE IF EXISTS Positsioon_plaadil
+DROP TABLE IF EXISTS plate_position
 ;
 
-DROP TABLE IF EXISTS Koopiaarv
+DROP TABLE IF EXISTS copy_number
 ;
 
-DROP TABLE IF EXISTS Paritolu
+DROP TABLE IF EXISTS inheritance
 ;
 
-DROP TABLE IF EXISTS Kasutaja
+DROP TABLE IF EXISTS user
 ;
 
-DROP TABLE IF EXISTS Patsient
+DROP TABLE IF EXISTS patient
 ;
 
-DROP TABLE IF EXISTS DNA
+DROP TABLE IF EXISTS dna
 ;
 
-DROP TABLE IF EXISTS Partii
+DROP TABLE IF EXISTS batch
 ;
 
-DROP TABLE IF EXISTS Plaat
+DROP TABLE IF EXISTS plate
 ;
 
-DROP TABLE IF EXISTS Analyys
+DROP TABLE IF EXISTS analysis
 ;
 
-DROP TABLE IF EXISTS Annotatsioon
+DROP TABLE IF EXISTS annotation
 ;
 
-DROP TABLE IF EXISTS CNV
+DROP TABLE IF EXISTS cnv
 ;
 
-DROP TABLE IF EXISTS CNV_annotatsioon
+DROP TABLE IF EXISTS cnv_annotation
 ;
 
 /* Create Tables with Primary and Foreign Keys, Check and Unique Constraints */
 
-CREATE TABLE Plaadi_seisund
+CREATE TABLE plate_status
 (
-	plaadi_seisund_kood INTEGER NOT NULL PRIMARY KEY,
-	plaadi_seisund_nimi TEXT NOT NULL,
-	on_aktuaalne_plaadi_seisund INTEGER NOT NULL DEFAULT 1,
-	CONSTRAINT AK_Plaadi_seisund_plaadi_seisund_nimi_unikaalne UNIQUE (plaadi_seisund_nimi),
-	CHECK(on_aktuaalne_plaadi_seisund IN (0,1)),
-	CHECK(length(trim(plaadi_seisund_nimi)) >= 1 AND length(plaadi_seisund_nimi) <= 20)
+	plate_status_code INTEGER NOT NULL PRIMARY KEY,
+	plate_status_name TEXT NOT NULL,
+	is_active INTEGER NOT NULL DEFAULT 1,
+	CONSTRAINT AK_plate_status_plate_status_name_unique UNIQUE (plate_status_name),
+	CHECK(is_active IN (0,1)),
+	CHECK(length(trim(plate_status_name)) >= 1 AND length(plate_status_name) <= 20)
 )
 ;
 
-CREATE TABLE Patsiendi_seisund
+CREATE TABLE patient_status
 (
-	patsiendi_seisund_kood INTEGER NOT NULL PRIMARY KEY,
-	patsiendi_seisund_nimi TEXT NOT NULL,
-	on_aktuaalne_patsiendi_seisund INTEGER NOT NULL DEFAULT 1,
-	CONSTRAINT AK_Patsiendi_seisund_patsiendi_seisund_nimi_unikaalne UNIQUE (patsiendi_seisund_nimi),
-	CHECK(on_aktuaalne_patsiendi_seisund IN (0,1)),
-	CHECK(length(trim(patsiendi_seisund_nimi)) >= 1 AND length(patsiendi_seisund_nimi) <= 20)
+	patient_status_code INTEGER NOT NULL PRIMARY KEY,
+	patient_status_name TEXT NOT NULL,
+	is_active INTEGER NOT NULL DEFAULT 1,
+	CONSTRAINT AK_patient_status_patient_status_name_unique UNIQUE (patient_status_name),
+	CHECK(is_active IN (0,1)),
+	CHECK(length(trim(patient_status_name)) >= 1 AND length(patient_status_name) <= 20)
 )
 ;
 
-CREATE TABLE Partii_seisund
+CREATE TABLE batch_status
 (
-	partii_seisund_kood INTEGER NOT NULL PRIMARY KEY,
-	partii_seisund_nimi TEXT NOT NULL,
-	on_aktuaalne_partii_seisund INTEGER NOT NULL DEFAULT 1,
-	CONSTRAINT AK_Partii_seisund_partii_seisund_nimi_unikaalne UNIQUE (partii_seisund_nimi),
-	CHECK(on_aktuaalne_partii_seisund IN (0,1)),
-	CHECK(length(trim(partii_seisund_nimi)) >= 1 AND length(partii_seisund_nimi) <= 20)
+	batch_status_code INTEGER NOT NULL PRIMARY KEY,
+	batch_status_name TEXT NOT NULL,
+	is_active INTEGER NOT NULL DEFAULT 1,
+	CONSTRAINT AK_batch_status_batch_status_name_unique UNIQUE (batch_status_name),
+	CHECK(is_active IN (0,1)),
+	CHECK(length(trim(batch_status_name)) >= 1 AND length(batch_status_name) <= 20)
 )
 ;
 
-CREATE TABLE DNA_seisund
+CREATE TABLE dna_status
 (
-	DNA_seisund_kood INTEGER NOT NULL PRIMARY KEY,
-	DNA_seisund_nimi TEXT NOT NULL,
-	on_aktuaalne_DNA_seisund INTEGER NOT NULL DEFAULT 1,
-	CONSTRAINT AK_DNA_seisund_DNA_seisund_nimi_unikaalne UNIQUE (DNA_seisund_nimi),
-	CHECK(on_aktuaalne_DNA_seisund IN (0,1)),
-	CHECK(length(trim(DNA_seisund_nimi)) >= 1 AND length(DNA_seisund_nimi) <= 20)
+	dna_status_code INTEGER NOT NULL PRIMARY KEY,
+	dna_status_name TEXT NOT NULL,
+	is_active INTEGER NOT NULL DEFAULT 1,
+	CONSTRAINT AK_dna_status_dna_status_name_unique UNIQUE (dna_status_name),
+	CHECK(is_active IN (0,1)),
+	CHECK(length(trim(dna_status_name)) >= 1 AND length(dna_status_name) <= 20)
 )
 ;
 
-CREATE TABLE Annotatsiooni_seisund
+CREATE TABLE annotation_status
 (
-	annotatsiooni_seisund_kood INTEGER NOT NULL PRIMARY KEY,
-	annotatsiooni_seisund_nimi TEXT NOT NULL,
-	on_aktuaalne_annotatsiooni_seisund INTEGER NOT NULL DEFAULT 1,
-	CONSTRAINT AK_Annotatsiooni_seisund_annotatsiooni_seisund_nimi_unikaalne UNIQUE (annotatsiooni_seisund_nimi),
-	CHECK(on_aktuaalne_annotatsiooni_seisund IN (0,1)),
-	CHECK(length(trim(annotatsiooni_seisund_nimi)) >= 1 AND length(annotatsiooni_seisund_nimi) <= 20)
+	annotation_status_code INTEGER NOT NULL PRIMARY KEY,
+	annotation_status_name TEXT NOT NULL,
+	is_active INTEGER NOT NULL DEFAULT 1,
+	CONSTRAINT AK_annotation_status_annotation_status_name_unique UNIQUE (annotation_status_name),
+	CHECK(is_active IN (0,1)),
+	CHECK(length(trim(annotation_status_name)) >= 1 AND length(annotation_status_name) <= 20)
 )
 ;
 
-CREATE TABLE Kasutaja_seisund
+CREATE TABLE user_status
 (
-	kasutaja_seisund_kood INTEGER NOT NULL PRIMARY KEY,
-	kasutaja_seisund_nimi TEXT NOT NULL,
-	on_aktuaalne_kasutaja_seisund INTEGER NOT NULL DEFAULT 1,
-	CONSTRAINT AK_Kasutaja_seisund_kasutaja_seisund_nimi_unikaalne UNIQUE (kasutaja_seisund_nimi),
-	CHECK(on_aktuaalne_kasutaja_seisund IN (0,1)),
-	CHECK(length(trim(kasutaja_seisund_nimi)) >= 1 AND length(kasutaja_seisund_nimi) <= 20)
+	user_status_code INTEGER NOT NULL PRIMARY KEY,
+	user_status_name TEXT NOT NULL,
+	is_active INTEGER NOT NULL DEFAULT 1,
+	CONSTRAINT AK_user_status_user_status_name_unique UNIQUE (user_status_name),
+	CHECK(is_active IN (0,1)),
+	CHECK(length(trim(user_status_name)) >= 1 AND length(user_status_name) <= 20)
 )
 ;
 
-CREATE TABLE Analyysi_seisund
+CREATE TABLE analysis_status
 (
-	analyysi_seisund_kood INTEGER NOT NULL DEFAULT 1 PRIMARY KEY,
-	analyysi_seisund_nimi TEXT NOT NULL,
-	on_aktuaalne_analyysi_seisund INTEGER NOT NULL DEFAULT 1,
-	CONSTRAINT AK_Analyysi_seisund_analyysi_seisund_nimi_unikaalne UNIQUE (analyysi_seisund_nimi),
-	CHECK(length(trim(analyysi_seisund_nimi)) > 0 AND length(analyysi_seisund_nimi) <= 20 AND analyysi_seisund_nimi GLOB '[a-zA-Z]*'),
-	CHECK(on_aktuaalne_analyysi_seisund IN (0,1))
+	analysis_status_code INTEGER NOT NULL DEFAULT 1 PRIMARY KEY,
+	analysis_status_name TEXT NOT NULL,
+	is_active INTEGER NOT NULL DEFAULT 1,
+	CONSTRAINT AK_analysis_status_analysis_status_name_unique UNIQUE (analysis_status_name),
+	CHECK(length(trim(analysis_status_name)) > 0 AND length(analysis_status_name) <= 20 AND analysis_status_name GLOB '[a-zA-Z]*'),
+	CHECK(is_active IN (0,1))
 )
 ;
 
-CREATE TABLE CNV_seisund
+CREATE TABLE cnv_status
 (
-	CNV_seisund_kood INTEGER NOT NULL PRIMARY KEY,
-	CNV_seisund_nimi TEXT NOT NULL,
-	on_aktuaalne_CNV_seisund INTEGER NOT NULL DEFAULT 1,
-	CONSTRAINT AK_CNV_seisund_CNV_seisund_nimi_unikaalne UNIQUE (CNV_seisund_nimi),
-	CHECK(on_aktuaalne_CNV_seisund IN (0,1)),
-	CHECK(length(trim(CNV_seisund_nimi)) >= 1 AND length(CNV_seisund_nimi) <= 20)
+	cnv_status_code INTEGER NOT NULL PRIMARY KEY,
+	cnv_status_name TEXT NOT NULL,
+	is_active INTEGER NOT NULL DEFAULT 1,
+	CONSTRAINT AK_cnv_status_cnv_status_name_unique UNIQUE (cnv_status_name),
+	CHECK(is_active IN (0,1)),
+	CHECK(length(trim(cnv_status_name)) >= 1 AND length(cnv_status_name) <= 20)
 )
 ;
 
-CREATE TABLE Analyysi_tyyp
+CREATE TABLE analysis_type
 (
-	analyysi_tyyp_kood INTEGER NOT NULL PRIMARY KEY,
-	analyysi_tyyp_nimi TEXT NOT NULL,
-	on_aktuaalne_analyysi_tyyp INTEGER NOT NULL DEFAULT 1,
-	CONSTRAINT AK_Analyysi_tyyp_analyysi_tyyp_nimi_unikaalne UNIQUE (analyysi_tyyp_nimi),
-	CHECK(on_aktuaalne_analyysi_tyyp IN (0,1)),
-	CHECK(length(trim(analyysi_tyyp_nimi)) >= 1 AND length(analyysi_tyyp_nimi) <= 20)
+	analysis_type_code INTEGER NOT NULL PRIMARY KEY,
+	analysis_type_name TEXT NOT NULL,
+	is_active INTEGER NOT NULL DEFAULT 1,
+	CONSTRAINT AK_analysis_type_analysis_type_name_unique UNIQUE (analysis_type_name),
+	CHECK(is_active IN (0,1)),
+	CHECK(length(trim(analysis_type_name)) >= 1 AND length(analysis_type_name) <= 20)
 )
 ;
 
-CREATE TABLE Annotatsiooni_tyyp
+CREATE TABLE annotation_type
 (
-	annotatsiooni_tyyp_kood INTEGER NOT NULL PRIMARY KEY,
-	annotatsiooni_tyyp_nimi TEXT NOT NULL,
-	on_aktuaalne_annotatsiooni_tyyp INTEGER NOT NULL DEFAULT 1,
-	CONSTRAINT AK_Annotatsiooni_tyyp_annotatsiooni_tyyp_nimi_unikaalne UNIQUE (annotatsiooni_tyyp_nimi),
-	CHECK(on_aktuaalne_annotatsiooni_tyyp IN (0,1)),
-	CHECK(length(trim(annotatsiooni_tyyp_nimi)) >= 1 AND length(annotatsiooni_tyyp_nimi) <= 20)
+	annotation_type_code INTEGER NOT NULL PRIMARY KEY,
+	annotation_type_name TEXT NOT NULL,
+	is_active INTEGER NOT NULL DEFAULT 1,
+	CONSTRAINT AK_annotation_type_annotation_type_name_unique UNIQUE (annotation_type_name),
+	CHECK(is_active IN (0,1)),
+	CHECK(length(trim(annotation_type_name)) >= 1 AND length(annotation_type_name) <= 20)
 )
 ;
 
-CREATE TABLE Kasutaja_roll
+CREATE TABLE user_role
 (
-	kasutaja_roll_kood INTEGER NOT NULL PRIMARY KEY,
-	kasutaja_roll_nimi TEXT NOT NULL,
-	on_aktuaalne_kasutaja_roll INTEGER NOT NULL DEFAULT 1,
-	CONSTRAINT AK_Kasutaja_roll_kasutaja_roll_nimi_unikaalne UNIQUE (kasutaja_roll_nimi),
-	CHECK(on_aktuaalne_kasutaja_roll IN (0,1)),
-	CHECK(length(trim(kasutaja_roll_nimi)) >= 1 AND length(kasutaja_roll_nimi) <= 20)
+	user_role_code INTEGER NOT NULL PRIMARY KEY,
+	user_role_name TEXT NOT NULL,
+	is_active INTEGER NOT NULL DEFAULT 1,
+	CONSTRAINT AK_user_role_user_role_name_unique UNIQUE (user_role_name),
+	CHECK(is_active IN (0,1)),
+	CHECK(length(trim(user_role_name)) >= 1 AND length(user_role_name) <= 20)
 )
 ;
 
-CREATE TABLE Positsioon_karbis
+CREATE TABLE box_position
 (
-	positsioon_karbis_kood INTEGER NOT NULL PRIMARY KEY,
-	positsioon_karbis_nimi TEXT NOT NULL,
-	on_aktuaalne_positsioon_karbis INTEGER NOT NULL DEFAULT 1,
-	CONSTRAINT AK_Positsioon_karbis_positsioon_karbis_nimi_unikaalne UNIQUE (positsioon_karbis_nimi),
-	CHECK(on_aktuaalne_positsioon_karbis IN (0,1)),
-	CHECK(positsioon_karbis_nimi GLOB '[A-Z][0-9][0-9]')
+	box_position_code INTEGER NOT NULL PRIMARY KEY,
+	box_position_name TEXT NOT NULL,
+	is_active INTEGER NOT NULL DEFAULT 1,
+	CONSTRAINT AK_box_position_box_position_name_unique UNIQUE (box_position_name),
+	CHECK(is_active IN (0,1)),
+	CHECK(box_position_name GLOB '[A-Z][0-9][0-9]')
 )
 ;
 
-CREATE TABLE Tahendus
+CREATE TABLE interpretation
 (
-	tahendus_kood INTEGER NOT NULL PRIMARY KEY,
-	tahendus_nimi TEXT NOT NULL,
-	on_aktuaalne_tahendus INTEGER NOT NULL DEFAULT 1,
-	CONSTRAINT AK_Tahendus_tahendus_nimi_unikaalne UNIQUE (tahendus_nimi),
-	CHECK(length(trim(tahendus_nimi)) > 0 AND length(tahendus_nimi) <= 16 AND (tahendus_nimi GLOB '[a-z]*' OR tahendus_nimi GLOB '[A-Z]*')),
-	CHECK(on_aktuaalne_tahendus IN (0,1))
+	interpretation_code INTEGER NOT NULL PRIMARY KEY,
+	interpretation_name TEXT NOT NULL,
+	is_active INTEGER NOT NULL DEFAULT 1,
+	CONSTRAINT AK_interpretation_interpretation_name_unique UNIQUE (interpretation_name),
+	CHECK(length(trim(interpretation_name)) > 0 AND length(interpretation_name) <= 16 AND (interpretation_name GLOB '[a-z]*' OR interpretation_name GLOB '[A-Z]*')),
+	CHECK(is_active IN (0,1))
 )
 ;
 
-CREATE TABLE Genoomi_versioon
+CREATE TABLE genome_build
 (
-	Genoomi_versioon_kood INTEGER NOT NULL PRIMARY KEY,
-	Genoomi_versioon_nimi TEXT NOT NULL,
-	on_aktuaalne_genoomi_versioon INTEGER NOT NULL DEFAULT 1,
-	CONSTRAINT AK_Genoomi_versioon_genoomi_versioon_nimi_unikaalne UNIQUE (Genoomi_versioon_nimi),
-	CHECK(on_aktuaalne_genoomi_versioon IN (0,1)),
-	CHECK(genoomi_versioon_nimi GLOB 'GRCh[0-9][0-9]')
+	genome_build_code INTEGER NOT NULL PRIMARY KEY,
+	genome_build_name TEXT NOT NULL,
+	is_active INTEGER NOT NULL DEFAULT 1,
+	CONSTRAINT AK_genome_build_genome_build_name_unique UNIQUE (genome_build_name),
+	CHECK(is_active IN (0,1)),
+	CHECK(genome_build_name GLOB 'GRCh[0-9][0-9]')
 )
 ;
 
-CREATE TABLE Server
+CREATE TABLE server
 (
-	server_kood INTEGER NOT NULL PRIMARY KEY,
-	server_nimi TEXT NOT NULL,
-	on_aktuaalne_server INTEGER NOT NULL DEFAULT 1,
-	CONSTRAINT AK_Server_server_nimi_unikaalne UNIQUE (server_nimi),
-	CHECK(on_aktuaalne_server IN (0,1)),
-	CHECK(length(trim(server_nimi)) >= 1 AND length(server_nimi) <= 50)
+	server_code INTEGER NOT NULL PRIMARY KEY,
+	server_name TEXT NOT NULL,
+	is_active INTEGER NOT NULL DEFAULT 1,
+	CONSTRAINT AK_server_server_name_unique UNIQUE (server_name),
+	CHECK(is_active IN (0,1)),
+	CHECK(length(trim(server_name)) >= 1 AND length(server_name) <= 50)
 )
 ;
 
-CREATE TABLE Kromosoom
+CREATE TABLE chromosome
 (
-	kromosoom_kood INTEGER NOT NULL PRIMARY KEY,
-	kromosoom_nimi TEXT NOT NULL,
-	on_aktuaalne_kromosoom INTEGER NOT NULL DEFAULT 1,
-	CONSTRAINT AK_Kromosoom_kromosoom_nimi_unikaalne UNIQUE (kromosoom_nimi),
-	CHECK(on_aktuaalne_kromosoom IN (0,1)),
-	CHECK(kromosoom_nimi IN ('1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','X','Y'))
+	chromosome_code INTEGER NOT NULL PRIMARY KEY,
+	chromosome_name TEXT NOT NULL,
+	is_active INTEGER NOT NULL DEFAULT 1,
+	CONSTRAINT AK_chromosome_chromosome_name_unique UNIQUE (chromosome_name),
+	CHECK(is_active IN (0,1)),
+	CHECK(chromosome_name IN ('1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','X','Y'))
 )
 ;
 
-CREATE TABLE Positsioon_plaadil
+CREATE TABLE plate_position
 (
-	positsioon_plaadil_kood INTEGER NOT NULL PRIMARY KEY,
-	positsioon_plaadil_nimi TEXT NOT NULL,
-	on_aktuaalne_positsioon_plaadil INTEGER NOT NULL DEFAULT 1,
-	CONSTRAINT AK_Positsioon_plaadil_positsioon_plaadil_nimi_unikaalne UNIQUE (positsioon_plaadil_nimi),
-	CHECK(on_aktuaalne_positsioon_plaadil IN (0,1)),
-	CHECK(        positsioon_plaadil_nimi IN ('R01C01','R02C01','R03C01','R04C01','R05C01','R06C01','R07C01','R08C01'))
+	plate_position_code INTEGER NOT NULL PRIMARY KEY,
+	plate_position_name TEXT NOT NULL,
+	is_active INTEGER NOT NULL DEFAULT 1,
+	CONSTRAINT AK_plate_position_plate_position_name_unique UNIQUE (plate_position_name),
+	CHECK(is_active IN (0,1)),
+	CHECK(        plate_position_name IN ('R01C01','R02C01','R03C01','R04C01','R05C01','R06C01','R07C01','R08C01'))
 )
 ;
 
-CREATE TABLE Koopiaarv
+CREATE TABLE copy_number
 (
-	koopiaarv_kood INTEGER NOT NULL PRIMARY KEY,
-	koopiaarv_vaartus INTEGER NOT NULL,
-	RGB_varv TEXT NOT NULL,
-	koopiaarv_nimi TEXT NOT NULL,
-	on_aktuaalne_koopiaarv INTEGER NOT NULL DEFAULT 1,
-	CONSTRAINT AK_Koopiaarv_RGB_varv_unikaalne UNIQUE (RGB_varv),
-	CONSTRAINT AK_Koopiaarv_nimi_unikaalne UNIQUE (koopiaarv_nimi),
-	CHECK(length(trim(RGB_varv)) > 0 AND length(trim(RGB_varv)) <= 11 AND RGB_varv GLOB '[0-9]*,[0-9]*,[0-9]*' ),
-	CHECK(on_aktuaalne_koopiaarv IN (0,1)),
-	CHECK(length(trim(koopiaarv_nimi)) >= 1 AND length(koopiaarv_nimi) <= 20),
-	CHECK(koopiaarv_vaartus >= 0 AND koopiaarv_vaartus <= 6)
+	copy_number_code INTEGER NOT NULL PRIMARY KEY,
+	copy_number_value INTEGER NOT NULL,
+	rgb_color TEXT NOT NULL,
+	copy_number_name TEXT NOT NULL,
+	is_active INTEGER NOT NULL DEFAULT 1,
+	CONSTRAINT AK_copy_number_rgb_color_unique UNIQUE (rgb_color),
+	CONSTRAINT AK_copy_number_name_unique UNIQUE (copy_number_name),
+	CHECK(length(trim(rgb_color)) > 0 AND length(trim(rgb_color)) <= 11 AND rgb_color GLOB '[0-9]*,[0-9]*,[0-9]*' ),
+	CHECK(is_active IN (0,1)),
+	CHECK(length(trim(copy_number_name)) >= 1 AND length(copy_number_name) <= 20),
+	CHECK(copy_number_value >= 0 AND copy_number_value <= 6)
 )
 ;
 
-CREATE TABLE Paritolu
+CREATE TABLE inheritance
 (
-	paritolu_kood INTEGER NOT NULL PRIMARY KEY,
-	paritolu_nimi TEXT NOT NULL,
-	on_aktuaalne_paritolu INTEGER NOT NULL DEFAULT 1,
-	CONSTRAINT AK_Paritolu_paritolu_nimi_unikaalne UNIQUE (paritolu_nimi),
-	CHECK(on_aktuaalne_paritolu IN (0,1)),
-	CHECK(length(trim(paritolu_nimi)) >= 1 AND length(paritolu_nimi) <= 20)
+	inheritance_code INTEGER NOT NULL PRIMARY KEY,
+	inheritance_name TEXT NOT NULL,
+	is_active INTEGER NOT NULL DEFAULT 1,
+	CONSTRAINT AK_inheritance_inheritance_name_unique UNIQUE (inheritance_name),
+	CHECK(is_active IN (0,1)),
+	CHECK(length(trim(inheritance_name)) >= 1 AND length(inheritance_name) <= 20)
 )
 ;
 
-CREATE TABLE Kasutaja
+CREATE TABLE user
 (
-	kasutaja_id INTEGER NOT NULL PRIMARY KEY,
-	meiliaadress TEXT NOT NULL,
-	parool TEXT NOT NULL,
-	kasutaja_roll_kood INTEGER NOT NULL,
-	kasutaja_reg_aeg TEXT NOT NULL DEFAULT CURRENT_DATE, 
-	kasutaja_seisund_kood INTEGER NOT NULL DEFAULT 1,
-	CONSTRAINT FK_Kasutaja_Kasutaja_roll FOREIGN KEY (kasutaja_roll_kood) REFERENCES Kasutaja_roll (kasutaja_roll_kood) ON DELETE NO ACTION ON UPDATE Cascade,
-	CONSTRAINT FK_Kasutaja_Kasutaja_seisund FOREIGN KEY (kasutaja_seisund_kood) REFERENCES Kasutaja_seisund (kasutaja_seisund_kood) ON DELETE NO ACTION ON UPDATE Cascade,
-	CONSTRAINT AK_Kasutaja_meiliaadress_unikaalne UNIQUE (meiliaadress),
-	CHECK(length(trim(meiliaadress)) > 0 AND meiliaadress LIKE '_%@%._%' AND meiliaadress NOT LIKE '%@.%' AND meiliaadress NOT LIKE '%..%'),
-	CHECK(JULIANDAY(kasutaja_reg_aeg) IS NOT NULL AND kasutaja_reg_aeg BETWEEN '2010-01-01' AND CURRENT_DATE),
-	CHECK(length(meiliaadress) <= 254),
-	CHECK(length(trim(parool)) >= 1 AND length(trim(parool)) < 30)
+	user_id INTEGER NOT NULL PRIMARY KEY,
+	email TEXT NOT NULL,
+	password TEXT NOT NULL,
+	user_role_code INTEGER NOT NULL,
+	user_registered_at TEXT NOT NULL DEFAULT CURRENT_DATE, 
+	user_status_code INTEGER NOT NULL DEFAULT 1,
+	CONSTRAINT FK_user_user_role FOREIGN KEY (user_role_code) REFERENCES user_role (user_role_code) ON DELETE NO ACTION ON UPDATE Cascade,
+	CONSTRAINT FK_user_user_status FOREIGN KEY (user_status_code) REFERENCES user_status (user_status_code) ON DELETE NO ACTION ON UPDATE Cascade,
+	CONSTRAINT AK_user_email_unique UNIQUE (email),
+	CHECK(length(trim(email)) > 0 AND email LIKE '_%@%._%' AND email NOT LIKE '%@.%' AND email NOT LIKE '%..%'),
+	CHECK(JULIANDAY(user_registered_at) IS NOT NULL AND user_registered_at BETWEEN '2010-01-01' AND CURRENT_DATE),
+	CHECK(length(email) <= 254),
+	CHECK(length(trim(password)) >= 1 AND length(trim(password)) < 30)
 )
 ;
 
-CREATE TABLE Patsient
+CREATE TABLE patient
 (
-	patsient_id INTEGER NOT NULL PRIMARY KEY,
-	isikukood TEXT NOT NULL,
-	nimi TEXT NOT NULL,
-	patsiendi_reg_aeg TEXT NOT NULL DEFAULT CURRENT_DATE,
-	patsiendi_seisund_kood INTEGER NOT NULL DEFAULT 1,
-	CONSTRAINT FK_Patsient_Patsiendi_seisund FOREIGN KEY (patsiendi_seisund_kood) REFERENCES Patsiendi_seisund (patsiendi_seisund_kood) ON DELETE NO ACTION ON UPDATE Cascade,
-	CONSTRAINT AK_Patsient_isikukood_nimi_aeg_komb_unikaalne UNIQUE (isikukood,nimi,patsiendi_reg_aeg),
-	CHECK(LENGTH(isikukood) = 11 AND isikukood GLOB '[1-6][0-9]*'),
-	CHECK(JULIANDAY(patsiendi_reg_aeg) IS NOT NULL AND patsiendi_reg_aeg BETWEEN '2010-01-01' AND CURRENT_DATE),
-	CHECK(length(trim(nimi)) >= 1 AND length(nimi) <= 50)
+	patient_id INTEGER NOT NULL PRIMARY KEY,
+	personal_code TEXT NOT NULL,
+	name TEXT NOT NULL,
+	patient_registered_at TEXT NOT NULL DEFAULT CURRENT_DATE,
+	patient_status_code INTEGER NOT NULL DEFAULT 1,
+	CONSTRAINT FK_patient_patient_status FOREIGN KEY (patient_status_code) REFERENCES patient_status (patient_status_code) ON DELETE NO ACTION ON UPDATE Cascade,
+	CONSTRAINT AK_patient_personal_code_name_time_comb_unique UNIQUE (personal_code,name,patient_registered_at),
+	CHECK(LENGTH(personal_code) = 11 AND personal_code GLOB '[1-6][0-9]*'),
+	CHECK(JULIANDAY(patient_registered_at) IS NOT NULL AND patient_registered_at BETWEEN '2010-01-01' AND CURRENT_DATE),
+	CHECK(length(trim(name)) >= 1 AND length(name) <= 50)
 )
 ;
 
-CREATE TABLE DNA
+CREATE TABLE dna
 (
 	dna_id INTEGER NOT NULL PRIMARY KEY,
-	DNA_kood TEXT NOT NULL,
-	patsient_id INTEGER NOT NULL,
-	DNA_karp INTEGER,
-	positsioon_karbis_kood INTEGER,
-	DNA_kontsentratsioon INTEGER,
-	dna_seisund_kood INTEGER NOT NULL DEFAULT 1,
-	CONSTRAINT FK_DNA_Positsioon_karbis FOREIGN KEY (positsioon_karbis_kood) REFERENCES Positsioon_karbis (positsioon_karbis_kood) ON DELETE NO ACTION ON UPDATE Cascade,
-	CONSTRAINT FK_DNA_DNA_seisund FOREIGN KEY (dna_seisund_kood) REFERENCES DNA_seisund (DNA_seisund_kood) ON DELETE NO ACTION ON UPDATE Cascade,
-	CONSTRAINT FK_DNA_Patsient FOREIGN KEY (patsient_id) REFERENCES Patsient (patsient_id) ON DELETE Cascade ON UPDATE NO ACTION,
-	CONSTRAINT AK_DNA_DNA_kood_unikaalne UNIQUE (DNA_kood),
-	CHECK(DNA_kood GLOB 'E[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'),
-	CHECK(DNA_kontsentratsioon IS NULL OR (DNA_kontsentratsioon BETWEEN 0 AND 999)),
-	CHECK(DNA_karp IS NULL OR (DNA_karp BETWEEN 0 AND 999))
+	dna_code TEXT NOT NULL,
+	patient_id INTEGER NOT NULL,
+	dna_box INTEGER,
+	box_position_code INTEGER,
+	dna_concentration INTEGER,
+	dna_status_code INTEGER NOT NULL DEFAULT 1,
+	CONSTRAINT FK_dna_box_position FOREIGN KEY (box_position_code) REFERENCES box_position (box_position_code) ON DELETE NO ACTION ON UPDATE Cascade,
+	CONSTRAINT FK_dna_dna_status FOREIGN KEY (dna_status_code) REFERENCES dna_status (dna_status_code) ON DELETE NO ACTION ON UPDATE Cascade,
+	CONSTRAINT FK_dna_patient FOREIGN KEY (patient_id) REFERENCES patient (patient_id) ON DELETE Cascade ON UPDATE NO ACTION,
+	CONSTRAINT AK_dna_dna_code_unique UNIQUE (dna_code),
+	CHECK(dna_code GLOB 'E[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'),
+	CHECK(dna_concentration IS NULL OR (dna_concentration BETWEEN 0 AND 999)),
+	CHECK(dna_box IS NULL OR (dna_box BETWEEN 0 AND 999))
 )
 ;
 
-CREATE TABLE Partii
+CREATE TABLE batch
 (
-	partii_id INTEGER NOT NULL PRIMARY KEY,
-	partii_kaust INTEGER NOT NULL,
-	partii_reg_aeg TEXT NOT NULL DEFAULT CURRENT_DATE,
-	server_kood INTEGER NOT NULL,
-	partii_seisund_kood INTEGER NOT NULL DEFAULT 1,
-	CONSTRAINT FK_Partii_Partii_seisund FOREIGN KEY (partii_seisund_kood) REFERENCES Partii_seisund (partii_seisund_kood) ON DELETE NO ACTION ON UPDATE Cascade,
-	CONSTRAINT FK_Partii_Server FOREIGN KEY (server_kood) REFERENCES Server (server_kood) ON DELETE NO ACTION ON UPDATE Cascade,
-	CONSTRAINT AK_Partii_Partii_kaust_unikaalne UNIQUE (partii_kaust),
-	CHECK(JULIANDAY(partii_reg_aeg) IS NOT NULL AND partii_reg_aeg BETWEEN '2010-01-01' AND CURRENT_DATE),
-	CHECK(length(trim(partii_kaust)) >= 10 AND length(trim(partii_kaust)) <= 30 AND partii_kaust GLOB '[a-zA-Z0-9_ -]*')
+	batch_id INTEGER NOT NULL PRIMARY KEY,
+	batch_folder INTEGER NOT NULL,
+	batch_registered_at TEXT NOT NULL DEFAULT CURRENT_DATE,
+	server_code INTEGER NOT NULL,
+	batch_status_code INTEGER NOT NULL DEFAULT 1,
+	CONSTRAINT FK_batch_batch_status FOREIGN KEY (batch_status_code) REFERENCES batch_status (batch_status_code) ON DELETE NO ACTION ON UPDATE Cascade,
+	CONSTRAINT FK_batch_server FOREIGN KEY (server_code) REFERENCES server (server_code) ON DELETE NO ACTION ON UPDATE Cascade,
+	CONSTRAINT AK_batch_batch_folder_unique UNIQUE (batch_folder),
+	CHECK(JULIANDAY(batch_registered_at) IS NOT NULL AND batch_registered_at BETWEEN '2010-01-01' AND CURRENT_DATE),
+	CHECK(length(trim(batch_folder)) >= 10 AND length(trim(batch_folder)) <= 30 AND batch_folder GLOB '[a-zA-Z0-9_ -]*')
 )
 ;
 
-CREATE TABLE Plaat
+CREATE TABLE plate
 (
-	plaat_id INTEGER NOT NULL PRIMARY KEY,
-	plaadi_kood INTEGER NOT NULL,
-	seerianumber TEXT,
-	partii_id INTEGER NOT NULL,
-	plaadi_seisund_kood INTEGER NOT NULL DEFAULT 1,
-	CONSTRAINT FK_Plaat_Plaadi_seisund FOREIGN KEY (plaadi_seisund_kood) REFERENCES Plaadi_seisund (plaadi_seisund_kood) ON DELETE NO ACTION ON UPDATE Cascade,
-	CONSTRAINT FK_Plaat_Partii FOREIGN KEY (partii_id) REFERENCES Partii (partii_id) ON DELETE NO ACTION ON UPDATE NO ACTION,
-	CONSTRAINT AK_Plaat_plaadi_kood_unikaalne UNIQUE (plaadi_kood),
-	CHECK(plaadi_kood BETWEEN 1 AND 9999),
-	CHECK(seerianumber IS NULL OR (LENGTH(trim(seerianumber)) = 12 AND seerianumber GLOB '[0-9]*'))
+	plate_id INTEGER NOT NULL PRIMARY KEY,
+	plate_code INTEGER NOT NULL,
+	serial_number TEXT,
+	batch_id INTEGER NOT NULL,
+	plate_status_code INTEGER NOT NULL DEFAULT 1,
+	CONSTRAINT FK_plate_plate_status FOREIGN KEY (plate_status_code) REFERENCES plate_status (plate_status_code) ON DELETE NO ACTION ON UPDATE Cascade,
+	CONSTRAINT FK_plate_batch FOREIGN KEY (batch_id) REFERENCES batch (batch_id) ON DELETE NO ACTION ON UPDATE NO ACTION,
+	CONSTRAINT AK_plate_plate_code_unique UNIQUE (plate_code),
+	CHECK(plate_code BETWEEN 1 AND 9999),
+	CHECK(serial_number IS NULL OR (LENGTH(trim(serial_number)) = 12 AND serial_number GLOB '[0-9]*'))
 )
 ;
 
-CREATE TABLE Analyys
+CREATE TABLE analysis
 (
-	analyys_id INTEGER NOT NULL PRIMARY KEY,
+	analysis_id INTEGER NOT NULL PRIMARY KEY,
 	dna_id INTEGER NOT NULL,
-	plaat_id INTEGER NOT NULL,
-	positsioon_plaadil_kood INTEGER NOT NULL,
-	naidustus TEXT NOT NULL,
-	analyysi_tyyp_kood INTEGER NOT NULL,
-	on_CITO INTEGER NOT NULL DEFAULT 0,
-	muutmise_aeg TEXT NOT NULL DEFAULT CURRENT_DATE,
-	raporteerimise_aeg TEXT,
-	kasutaja_id INTEGER NOT NULL,
-	genoomi_versioon_kood INTEGER NOT NULL DEFAULT 1,
+	plate_id INTEGER NOT NULL,
+	plate_position_code INTEGER NOT NULL,
+	indication TEXT NOT NULL,
+	analysis_type_code INTEGER NOT NULL,
+	is_cito INTEGER NOT NULL DEFAULT 0,
+	modified_at TEXT NOT NULL DEFAULT CURRENT_DATE,
+	reported_at TEXT,
+	user_id INTEGER NOT NULL,
+	genome_build_code INTEGER NOT NULL DEFAULT 1,
 	proband INTEGER,
-	analyysi_seisund_kood INTEGER NOT NULL DEFAULT 1,
-	CONSTRAINT FK_Analyys_proband FOREIGN KEY (proband) REFERENCES Analyys (analyys_id) ON DELETE NO ACTION ON UPDATE NO ACTION,
-	CONSTRAINT FK_Analyys_Analyysi_tyyp FOREIGN KEY (analyysi_tyyp_kood) REFERENCES Analyysi_tyyp (analyysi_tyyp_kood) ON DELETE NO ACTION ON UPDATE Cascade,
-	CONSTRAINT FK_Analyys_Positsioon_plaadil FOREIGN KEY (positsioon_plaadil_kood) REFERENCES Positsioon_plaadil (positsioon_plaadil_kood) ON DELETE NO ACTION ON UPDATE Cascade,
-	CONSTRAINT FK_Analyys_Analyysi_seisund FOREIGN KEY (analyysi_seisund_kood) REFERENCES Analyysi_seisund (analyysi_seisund_kood) ON DELETE NO ACTION ON UPDATE Cascade,
-	CONSTRAINT FK_Analyys_DNA FOREIGN KEY (dna_id) REFERENCES DNA (dna_id) ON DELETE Cascade ON UPDATE NO ACTION,
-	CONSTRAINT FK_Analyys_Genoomi_versioon FOREIGN KEY (genoomi_versioon_kood) REFERENCES Genoomi_versioon (Genoomi_versioon_kood) ON DELETE NO ACTION ON UPDATE Cascade,
-	CONSTRAINT FK_Analyys_Plaat FOREIGN KEY (plaat_id) REFERENCES Plaat (plaat_id) ON DELETE NO ACTION ON UPDATE NO ACTION,
-	CONSTRAINT FK_Analyys_Kasutaja FOREIGN KEY (kasutaja_id) REFERENCES Kasutaja (kasutaja_id) ON DELETE NO ACTION ON UPDATE NO ACTION,
-	CONSTRAINT AK_Analyys_plaat_DNA_komb_unikaalne UNIQUE (dna_id,plaat_id),
-	CHECK(raporteerimise_aeg >= muutmise_aeg),
-	CHECK(raporteerimise_aeg IS NULL OR (JULIANDAY(raporteerimise_aeg) AND raporteerimise_aeg BETWEEN '2010-01-01' AND CURRENT_DATE)),
-	CHECK(JULIANDAY(muutmise_aeg) IS NOT NULL AND muutmise_aeg BETWEEN '2010-01-01' AND CURRENT_DATE),
-	CHECK(on_CITO IN (0,1)),
-	CHECK(length(trim(naidustus)) >= 1 AND length(naidustus) <= 255)
+	analysis_status_code INTEGER NOT NULL DEFAULT 1,
+	CONSTRAINT FK_analysis_proband FOREIGN KEY (proband) REFERENCES analysis (analysis_id) ON DELETE NO ACTION ON UPDATE NO ACTION,
+	CONSTRAINT FK_analysis_analysis_type FOREIGN KEY (analysis_type_code) REFERENCES analysis_type (analysis_type_code) ON DELETE NO ACTION ON UPDATE Cascade,
+	CONSTRAINT FK_analysis_plate_position FOREIGN KEY (plate_position_code) REFERENCES plate_position (plate_position_code) ON DELETE NO ACTION ON UPDATE Cascade,
+	CONSTRAINT FK_analysis_analysis_status FOREIGN KEY (analysis_status_code) REFERENCES analysis_status (analysis_status_code) ON DELETE NO ACTION ON UPDATE Cascade,
+	CONSTRAINT FK_analysis_dna FOREIGN KEY (dna_id) REFERENCES dna (dna_id) ON DELETE Cascade ON UPDATE NO ACTION,
+	CONSTRAINT FK_analysis_genome_build FOREIGN KEY (genome_build_code) REFERENCES genome_build (genome_build_code) ON DELETE NO ACTION ON UPDATE Cascade,
+	CONSTRAINT FK_analysis_plate FOREIGN KEY (plate_id) REFERENCES plate (plate_id) ON DELETE NO ACTION ON UPDATE NO ACTION,
+	CONSTRAINT FK_analysis_user FOREIGN KEY (user_id) REFERENCES user (user_id) ON DELETE NO ACTION ON UPDATE NO ACTION,
+	CONSTRAINT AK_analysis_plate_dna_comb_unique UNIQUE (dna_id,plate_id),
+	CHECK(reported_at >= modified_at),
+	CHECK(reported_at IS NULL OR (JULIANDAY(reported_at) AND reported_at BETWEEN '2010-01-01' AND CURRENT_DATE)),
+	CHECK(JULIANDAY(modified_at) IS NOT NULL AND modified_at BETWEEN '2010-01-01' AND CURRENT_DATE),
+	CHECK(is_cito IN (0,1)),
+	CHECK(length(trim(indication)) >= 1 AND length(indication) <= 255)
 )
 ;
 
-CREATE TABLE Annotatsioon
+CREATE TABLE annotation
 (
-	annotatsioon_id INTEGER NOT NULL PRIMARY KEY,
-	kromosoom_kood INTEGER NOT NULL,
-	alguskoordinaat INTEGER NOT NULL,
-	loppkoordinaat INTEGER NOT NULL,
-	koopiaarv_kood INTEGER NOT NULL,
-	tahendus_kood INTEGER NOT NULL,
-	annotatsiooni_tyyp_kood INTEGER NOT NULL,
-	annotatsiooni_seisund_kood INTEGER NOT NULL DEFAULT 1,
-	CONSTRAINT FK_Annotatsioon_Annotatsiooni_seisund FOREIGN KEY (annotatsiooni_seisund_kood) REFERENCES Annotatsiooni_seisund (annotatsiooni_seisund_kood) ON DELETE NO ACTION ON UPDATE Cascade,
-	CONSTRAINT FK_Annotatsioon_Kromosoom FOREIGN KEY (kromosoom_kood) REFERENCES Kromosoom (kromosoom_kood) ON DELETE NO ACTION ON UPDATE Cascade,
-	CONSTRAINT FK_Annotatsioon_Koopiaarv FOREIGN KEY (koopiaarv_kood) REFERENCES Koopiaarv (koopiaarv_kood) ON DELETE NO ACTION ON UPDATE Cascade,
-	CONSTRAINT FK_Annotatsioon_Tahendus FOREIGN KEY (tahendus_kood) REFERENCES Tahendus (tahendus_kood) ON DELETE NO ACTION ON UPDATE Cascade,
-	CONSTRAINT FK_Annotatsioon_Annotatsiooni_tyyp FOREIGN KEY (annotatsiooni_tyyp_kood) REFERENCES Annotatsiooni_tyyp (annotatsiooni_tyyp_kood) ON DELETE NO ACTION ON UPDATE Cascade,
-	CONSTRAINT AK_Annotatsioon_kromosoom_alguskoordinaat_loppkoordinaat_komb_unikaalne UNIQUE (alguskoordinaat,loppkoordinaat,kromosoom_kood),
-	CHECK(alguskoordinaat BETWEEN 1 AND 248387328),
-	CHECK(loppkoordinaat > alguskoordinaat),
-	CHECK(loppkoordinaat BETWEEN 1 AND 248387328)
+	annotation_id INTEGER NOT NULL PRIMARY KEY,
+	chromosome_code INTEGER NOT NULL,
+	start_pos INTEGER NOT NULL,
+	end_pos INTEGER NOT NULL,
+	copy_number_code INTEGER NOT NULL,
+	interpretation_code INTEGER NOT NULL,
+	annotation_type_code INTEGER NOT NULL,
+	annotation_status_code INTEGER NOT NULL DEFAULT 1,
+	CONSTRAINT FK_annotation_annotation_status FOREIGN KEY (annotation_status_code) REFERENCES annotation_status (annotation_status_code) ON DELETE NO ACTION ON UPDATE Cascade,
+	CONSTRAINT FK_annotation_chromosome FOREIGN KEY (chromosome_code) REFERENCES chromosome (chromosome_code) ON DELETE NO ACTION ON UPDATE Cascade,
+	CONSTRAINT FK_annotation_copy_number FOREIGN KEY (copy_number_code) REFERENCES copy_number (copy_number_code) ON DELETE NO ACTION ON UPDATE Cascade,
+	CONSTRAINT FK_annotation_interpretation FOREIGN KEY (interpretation_code) REFERENCES interpretation (interpretation_code) ON DELETE NO ACTION ON UPDATE Cascade,
+	CONSTRAINT FK_annotation_annotation_type FOREIGN KEY (annotation_type_code) REFERENCES annotation_type (annotation_type_code) ON DELETE NO ACTION ON UPDATE Cascade,
+	CONSTRAINT AK_annotation_chromosome_start_pos_end_pos_comb_unique UNIQUE (start_pos,end_pos,chromosome_code),
+	CHECK(start_pos BETWEEN 1 AND 248387328),
+	CHECK(end_pos > start_pos),
+	CHECK(end_pos BETWEEN 1 AND 248387328)
 )
 ;
 
-CREATE TABLE CNV
+CREATE TABLE cnv
 (
 	cnv_id INTEGER NOT NULL PRIMARY KEY,
-	analyys_id INTEGER NOT NULL,
-	kromosoom_kood INTEGER NOT NULL,
-	alguskoordinaat INTEGER NOT NULL,
-	loppkoordinaat INTEGER NOT NULL,
-	koopiaarv_kood INTEGER NOT NULL,
-	CNV_seisund_kood INTEGER NOT NULL DEFAULT 1,
-	tahendus_kood INTEGER NOT NULL DEFAULT 1,
-	paritolu_kood INTEGER NOT NULL DEFAULT 1,
-	CONSTRAINT FK_CNV_Analyys FOREIGN KEY (analyys_id) REFERENCES Analyys (analyys_id) ON DELETE Cascade ON UPDATE NO ACTION,
-	CONSTRAINT FK_CNV_CNV_seisund FOREIGN KEY (CNV_seisund_kood) REFERENCES CNV_seisund (CNV_seisund_kood) ON DELETE NO ACTION ON UPDATE Cascade,
-	CONSTRAINT FK_CNV_Kromosoom FOREIGN KEY (kromosoom_kood) REFERENCES Kromosoom (kromosoom_kood) ON DELETE NO ACTION ON UPDATE Cascade,
-	CONSTRAINT FK_CNV_Koopiaarv FOREIGN KEY (koopiaarv_kood) REFERENCES Koopiaarv (koopiaarv_kood) ON DELETE NO ACTION ON UPDATE Cascade,
-	CONSTRAINT FK_CNV_Paritolu FOREIGN KEY (paritolu_kood) REFERENCES Paritolu (paritolu_kood) ON DELETE NO ACTION ON UPDATE Cascade,
-	CONSTRAINT FK_CNV_Tahendus FOREIGN KEY (tahendus_kood) REFERENCES Tahendus (tahendus_kood) ON DELETE NO ACTION ON UPDATE Cascade,
-	CONSTRAINT AK_CNV_analyys_kromosoom_alguskoordinaat_loppkoordinaat_komb_unikaalne UNIQUE (analyys_id,kromosoom_kood,alguskoordinaat,loppkoordinaat),
-	CHECK(alguskoordinaat BETWEEN 1 AND 248387328),
-	CHECK(loppkoordinaat BETWEEN 1 AND 248387328),
-	CHECK(loppkoordinaat > alguskoordinaat)
+	analysis_id INTEGER NOT NULL,
+	chromosome_code INTEGER NOT NULL,
+	start_pos INTEGER NOT NULL,
+	end_pos INTEGER NOT NULL,
+	copy_number_code INTEGER NOT NULL,
+	cnv_status_code INTEGER NOT NULL DEFAULT 1,
+	interpretation_code INTEGER NOT NULL DEFAULT 1,
+	inheritance_code INTEGER NOT NULL DEFAULT 1,
+	CONSTRAINT FK_cnv_analysis FOREIGN KEY (analysis_id) REFERENCES analysis (analysis_id) ON DELETE Cascade ON UPDATE NO ACTION,
+	CONSTRAINT FK_cnv_cnv_status FOREIGN KEY (cnv_status_code) REFERENCES cnv_status (cnv_status_code) ON DELETE NO ACTION ON UPDATE Cascade,
+	CONSTRAINT FK_cnv_chromosome FOREIGN KEY (chromosome_code) REFERENCES chromosome (chromosome_code) ON DELETE NO ACTION ON UPDATE Cascade,
+	CONSTRAINT FK_cnv_copy_number FOREIGN KEY (copy_number_code) REFERENCES copy_number (copy_number_code) ON DELETE NO ACTION ON UPDATE Cascade,
+	CONSTRAINT FK_cnv_inheritance FOREIGN KEY (inheritance_code) REFERENCES inheritance (inheritance_code) ON DELETE NO ACTION ON UPDATE Cascade,
+	CONSTRAINT FK_cnv_interpretation FOREIGN KEY (interpretation_code) REFERENCES interpretation (interpretation_code) ON DELETE NO ACTION ON UPDATE Cascade,
+	CONSTRAINT AK_cnv_analysis_chromosome_start_pos_end_pos_comb_unique UNIQUE (analysis_id,chromosome_code,start_pos,end_pos),
+	CHECK(start_pos BETWEEN 1 AND 248387328),
+	CHECK(end_pos BETWEEN 1 AND 248387328),
+	CHECK(end_pos > start_pos)
 )
 ;
 
-CREATE TABLE CNV_annotatsioon
+CREATE TABLE cnv_annotation
 (
 	cnv_id INTEGER NOT NULL,
-	annotatsioon_id INTEGER NOT NULL,
-	CONSTRAINT PK_CNV_annotatsioon PRIMARY KEY (cnv_id,annotatsioon_id),
-	CONSTRAINT FK_CNV_annotatsioon_CNV FOREIGN KEY (cnv_id) REFERENCES CNV (cnv_id) ON DELETE NO ACTION ON UPDATE NO ACTION,
-	CONSTRAINT FK_CNV_annotatsioon_Annotatsioon FOREIGN KEY (annotatsioon_id) REFERENCES Annotatsioon (annotatsioon_id) ON DELETE NO ACTION ON UPDATE NO ACTION
+	annotation_id INTEGER NOT NULL,
+	CONSTRAINT PK_cnv_annotation PRIMARY KEY (cnv_id,annotation_id),
+	CONSTRAINT FK_cnv_annotation_cnv FOREIGN KEY (cnv_id) REFERENCES cnv (cnv_id) ON DELETE NO ACTION ON UPDATE NO ACTION,
+	CONSTRAINT FK_cnv_annotation_annotation FOREIGN KEY (annotation_id) REFERENCES annotation (annotation_id) ON DELETE NO ACTION ON UPDATE NO ACTION
 )
 ;
 
 /* Create Indexes and Triggers */
 
-CREATE INDEX IXFK_Kasutaja_Kasutaja_roll
- ON Kasutaja (kasutaja_roll_kood ASC)
+CREATE INDEX IXFK_user_user_role
+ ON user (user_role_code ASC)
 ;
 
-CREATE INDEX IXFK_Kasutaja_Kasutaja_seisund
- ON Kasutaja (kasutaja_seisund_kood ASC)
+CREATE INDEX IXFK_user_user_status
+ ON user (user_status_code ASC)
 ;
 
-CREATE INDEX IXFK_Patsient_patsiendi_seisund
- ON Patsient (patsiendi_seisund_kood ASC)
+CREATE INDEX IXFK_patient_patient_status
+ ON patient (patient_status_code ASC)
 ;
 
-CREATE INDEX IXFK_DNA_DNA_seisund
- ON DNA (dna_seisund_kood ASC)
+CREATE INDEX IXFK_dna_dna_status
+ ON dna (dna_status_code ASC)
 ;
 
-CREATE INDEX IXFK_DNA_Positsioon_karbis
- ON DNA (positsioon_karbis_kood ASC)
+CREATE INDEX IXFK_dna_box_position
+ ON dna (box_position_code ASC)
 ;
 
-CREATE INDEX IXFK_Partii_Partii_seisund
- ON Partii (partii_seisund_kood ASC)
+CREATE INDEX IXFK_batch_batch_status
+ ON batch (batch_status_code ASC)
 ;
 
-CREATE INDEX IXFK_Partii_Server
- ON Partii (server_kood ASC)
+CREATE INDEX IXFK_batch_server
+ ON batch (server_code ASC)
 ;
 
-CREATE INDEX IXFK_Plaat_Partii
- ON Plaat (partii_id ASC)
+CREATE INDEX IXFK_plate_batch
+ ON plate (batch_id ASC)
 ;
 
-CREATE INDEX IXFK_Plaat_Plaadi_seisund
- ON Plaat (plaadi_seisund_kood ASC)
+CREATE INDEX IXFK_plate_plate_status
+ ON plate (plate_status_code ASC)
 ;
 
-CREATE INDEX IXFK_Analyys_Analyysi_seisund
- ON Analyys (analyysi_seisund_kood ASC)
+CREATE INDEX IXFK_analysis_analysis_status
+ ON analysis (analysis_status_code ASC)
 ;
 
-CREATE INDEX IXFK_Analyys_Analyysi_tyyp
- ON Analyys (analyysi_tyyp_kood ASC)
+CREATE INDEX IXFK_analysis_analysis_type
+ ON analysis (analysis_type_code ASC)
 ;
 
-CREATE INDEX IXFK_Analyys_Genoomi_versioon
- ON Analyys (genoomi_versioon_kood ASC)
+CREATE INDEX IXFK_analysis_genome_build
+ ON analysis (genome_build_code ASC)
 ;
 
-CREATE INDEX IXFK_Analyys_Kasutaja
- ON Analyys (kasutaja_id ASC)
+CREATE INDEX IXFK_analysis_user
+ ON analysis (user_id ASC)
 ;
 
-CREATE INDEX IXFK_Analyys_Plaat
- ON Analyys (plaat_id ASC)
+CREATE INDEX IXFK_analysis_plate
+ ON analysis (plate_id ASC)
 ;
 
-CREATE INDEX IXFK_Analyys_Positsioon_plaadil
- ON Analyys (positsioon_plaadil_kood ASC)
+CREATE INDEX IXFK_analysis_plate_position
+ ON analysis (plate_position_code ASC)
 ;
 
-CREATE INDEX IXFK_Analyys_proband
- ON Analyys (proband ASC)
+CREATE INDEX IXFK_analysis_proband
+ ON analysis (proband ASC)
 ;
 
-CREATE INDEX IXFK_Annotatsioon_Annotatsiooni_seisund
- ON Annotatsioon (annotatsiooni_seisund_kood ASC)
+CREATE INDEX IXFK_annotation_annotation_status
+ ON annotation (annotation_status_code ASC)
 ;
 
-CREATE INDEX IXFK_Annotatsioon_Koopiaarv
- ON Annotatsioon (koopiaarv_kood ASC)
+CREATE INDEX IXFK_annotation_copy_number
+ ON annotation (copy_number_code ASC)
 ;
 
-CREATE INDEX IXFK_Annotatsioon_Kromosoom
- ON Annotatsioon (annotatsiooni_tyyp_kood ASC)
+CREATE INDEX IXFK_annotation_chromosome
+ ON annotation (annotation_type_code ASC)
 ;
 
-CREATE INDEX IXFK_Annotatsioon_Tahendus
- ON Annotatsioon (tahendus_kood ASC)
+CREATE INDEX IXFK_annotation_interpretation
+ ON annotation (interpretation_code ASC)
 ;
 
-CREATE INDEX IXFK_Annotatsioon_Annotatsiooni_tyyp
- ON Annotatsioon (annotatsiooni_tyyp_kood ASC)
+CREATE INDEX IXFK_annotation_annotation_type
+ ON annotation (annotation_type_code ASC)
 ;
 
-CREATE INDEX IXFK_CNV_CNV_seisund
- ON CNV (kromosoom_kood ASC)
+CREATE INDEX IXFK_cnv_cnv_status
+ ON cnv (chromosome_code ASC)
 ;
 
-CREATE INDEX IXFK_CNV_Koopiaarv
- ON CNV (koopiaarv_kood ASC)
+CREATE INDEX IXFK_cnv_copy_number
+ ON cnv (copy_number_code ASC)
 ;
 
-CREATE INDEX IXFK_CNV_Paritolu
- ON CNV (paritolu_kood ASC)
+CREATE INDEX IXFK_cnv_inheritance
+ ON cnv (inheritance_code ASC)
 ;
 
-CREATE INDEX IXFK_CNV_Tahendus
- ON CNV (tahendus_kood ASC)
+CREATE INDEX IXFK_cnv_interpretation
+ ON cnv (interpretation_code ASC)
 ;
 
-CREATE INDEX IXFK_CNV_Kromosoom
- ON CNV (kromosoom_kood ASC)
+CREATE INDEX IXFK_cnv_chromosome
+ ON cnv (chromosome_code ASC)
 ;
 
-CREATE INDEX IXFK_CNV_annotatsioon_Annotatsioon
- ON CNV_annotatsioon (annotatsioon_id ASC)
+CREATE INDEX IXFK_cnv_annotation_annotation
+ ON cnv_annotation (annotation_id ASC)
 ;
 
 
@@ -592,105 +592,105 @@ CREATE INDEX IXFK_CNV_annotatsioon_Annotatsioon
 
 -- Trigger BR_CNV_9: Cannot update CNV if state is 'artefakt'
 CREATE TRIGGER check_update_cnv_not_artefact
-BEFORE UPDATE ON CNV
+BEFORE UPDATE ON cnv
 FOR EACH ROW
-WHEN OLD.CNV_seisund_kood = 2
+WHEN OLD.cnv_status_code = 2
 BEGIN
-    SELECT RAISE(ABORT, 'Ei saa CNVd muuta: märgitud artefaktiks (BR_CNV_9).')
-    WHERE NEW.kromosoom_kood != OLD.kromosoom_kood OR NEW.alguskoordinaat != OLD.alguskoordinaat OR
-          NEW.loppkoordinaat != OLD.loppkoordinaat OR NEW.koopiaarv_kood != OLD.koopiaarv_kood OR
-          NEW.tahendus_kood != OLD.tahendus_kood OR NEW.paritolu_kood != OLD.paritolu_kood;
+    SELECT RAISE(ABORT, 'Ei saa CNV-d muuta: märgitud artefaktiks (BR_CNV_9).')
+    WHERE NEW.chromosome_code != OLD.chromosome_code OR NEW.start_pos != OLD.start_pos OR
+          NEW.end_pos != OLD.end_pos OR NEW.copy_number_code != OLD.copy_number_code OR
+          NEW.interpretation_code != OLD.interpretation_code OR NEW.inheritance_code != OLD.inheritance_code;
 END;
 ;
 
 
 -- Trigger BR_CNV_7: Can only mark as 'artefakt' if current state is 'aktiivne'
 CREATE TRIGGER check_set_artefact
-BEFORE UPDATE OF CNV_seisund_kood ON CNV
+BEFORE UPDATE OF cnv_status_code ON cnv
 FOR EACH ROW
-WHEN NEW.CNV_seisund_kood = 2
+WHEN NEW.cnv_status_code = 2
 BEGIN
     SELECT RAISE(ABORT, 'Ei saa artefaktiks märkida: CNV ei ole aktiivne (BR_CNV_7).')
-    WHERE OLD.CNV_seisund_kood != 1;
+    WHERE OLD.cnv_status_code != 1;
 END;
 ;
 
 
 -- Trigger BR_CNV_8: Can only activate if artefact AND Analysis is active
 CREATE TRIGGER check_activate_cnv
-BEFORE UPDATE OF CNV_seisund_kood ON CNV
+BEFORE UPDATE OF cnv_status_code ON cnv
 FOR EACH ROW
-WHEN NEW.CNV_seisund_kood = 1
+WHEN NEW.cnv_status_code = 1
 BEGIN
     SELECT RAISE(ABORT, 'Ei saa aktiivseks märkida: CNV ei ole artefakt.')
-    WHERE OLD.CNV_seisund_kood != 2;
+    WHERE OLD.cnv_status_code != 2;
     SELECT RAISE(ABORT, 'Ei saa aktiivseks märkida: seotud analüüs on artefakt (BR_CNV_8).')
-    WHERE EXISTS (SELECT 1 FROM Analyys a WHERE a.analyys_id = NEW.analyys_id AND a.analyysi_seisund_kood == 2);
+    WHERE EXISTS (SELECT 1 FROM analysis a WHERE a.analysis_id = NEW.analysis_id AND a.analysis_status_code == 2);
 END;
 ;
 
 
 -- Trigger BR_CNV_6: New CNVs must start as active (redundant if DEFAULT works)
 CREATE TRIGGER check_insert_cnv_state
-BEFORE INSERT ON CNV
+BEFORE INSERT ON cnv
 FOR EACH ROW
-WHEN NEW.CNV_seisund_kood IS NOT NULL AND NEW.CNV_seisund_kood != 1
+WHEN NEW.cnv_status_code IS NOT NULL AND NEW.cnv_status_code != 1
 BEGIN
-     SELECT RAISE(ABORT, 'Uued CNVd peavad olema aktiivses seisundis (BR_CNV_6).');
+     SELECT RAISE(ABORT, 'Uued CNV-d peavad olema aktiivses seisundis (BR_CNV_6).');
 END;
 ;
 
 
 -- Trigger for BR_CNV_10: Set related CNVs to artefact when Analysis becomes artefact
 CREATE TRIGGER set_cnvs_to_artefact_on_analysis_update
-AFTER UPDATE OF analyysi_seisund_kood ON Analyys
+AFTER UPDATE OF analysis_status_code ON analysis
 FOR EACH ROW
-WHEN NEW.analyysi_seisund_kood = 2 -- Check NEW analysis state code
- AND OLD.analyysi_seisund_kood != NEW.analyysi_seisund_kood -- Check if state actually changed
+WHEN NEW.analysis_status_code = 2 -- Check NEW analysis state code
+ AND OLD.analysis_status_code != NEW.analysis_status_code -- Check if state actually changed
 BEGIN
     -- Update CNVs linked to this analysis
-    UPDATE CNV
-    SET CNV_seisund_kood = 2 -- Set CNV state code to artefact
-    WHERE CNV.analyys_id = NEW.analyys_id -- Match the updated analysis ID
-      AND CNV.CNV_seisund_kood != 2; -- Avoid re-updating CNVs already marked as artefact
+    UPDATE cnv
+    SET cnv_status_code = 2 -- Set CNV state code to artefact
+    WHERE cnv.analysis_id = NEW.analysis_id -- Match the updated analysis ID
+      AND cnv.cnv_status_code != 2; -- Avoid re-updating CNVs already marked as artefact
 END;
 ;
 
 
 -- Trigger BR_CNV_12 (INSERT): Ensure referenced classifiers are active
 CREATE TRIGGER check_active_classifiers_insert
-BEFORE INSERT ON CNV
+BEFORE INSERT ON cnv
 FOR EACH ROW
 BEGIN
-    -- Check Kromosoom
+    -- Check chromosome
     SELECT RAISE(ABORT, 'BR_CNV_12: Seda kromosoomi väärtust ei saa valida (ei ole aktuaalne või kehtetu).')
     WHERE NOT EXISTS (
-        SELECT 1 FROM Kromosoom
-        WHERE kromosoom_kood = NEW.kromosoom_kood AND on_aktuaalne_Kromosoom = 1
+        SELECT 1 FROM chromosome
+        WHERE chromosome_code = NEW.chromosome_code AND is_active = 1
     );
-    -- Check Koopiaarv
+    -- Check copy_number
     SELECT RAISE(ABORT, 'BR_CNV_12: Seda koopiaarvu väärtust ei saa valida (ei ole aktuaalne või kehtetu).')
     WHERE NOT EXISTS (
-        SELECT 1 FROM Koopiaarv
-        WHERE koopiaarv_kood = NEW.koopiaarv_kood AND on_aktuaalne_Koopiaarv = 1
+        SELECT 1 FROM copy_number
+        WHERE copy_number_code = NEW.copy_number_code AND is_active = 1
     );
-    -- Check Tahendus
+    -- Check interpretation
     SELECT RAISE(ABORT, 'BR_CNV_12: Seda tähenduse väärtust ei saa valida (ei ole aktuaalne või kehtetu).')
     WHERE NOT EXISTS (
-        SELECT 1 FROM Tahendus
-        WHERE tahendus_kood = NEW.tahendus_kood AND on_aktuaalne_Tahendus = 1
+        SELECT 1 FROM interpretation
+        WHERE interpretation_code = NEW.interpretation_code AND is_active = 1
     );
-    -- Check Paritolu
+    -- Check inheritance
     SELECT RAISE(ABORT, 'BR_CNV_12: Seda päritolu väärtust ei saa valida (ei ole aktuaalne või kehtetu).')
     WHERE NOT EXISTS (
-        SELECT 1 FROM Paritolu
-        WHERE paritolu_kood = NEW.paritolu_kood AND on_aktuaalne_Paritolu = 1
+        SELECT 1 FROM inheritance
+        WHERE inheritance_code = NEW.inheritance_code AND is_active = 1
     );
-    -- Check CNV_seisund (Initial state check is also handled by check_insert_cnv_state)
+    -- Check cnv_status (Initial state check is also handled by check_insert_cnv_state)
     SELECT RAISE(ABORT, 'BR_CNV_12: Seda CNV seisundi väärtust ei saa valida (ei ole aktuaalne või kehtetu).')
     WHERE NOT EXISTS (
-        SELECT 1 FROM CNV_seisund
-        WHERE CNV_seisund_kood = NEW.CNV_seisund_kood AND on_aktuaalne_CNV_seisund = 1
+        SELECT 1 FROM cnv_status
+        WHERE cnv_status_code = NEW.cnv_status_code AND is_active = 1
     );
 END;
 ;
@@ -698,45 +698,45 @@ END;
 
 -- Trigger BR_CNV_12 (UPDATE): Ensure UPDATED referenced classifiers are active
 CREATE TRIGGER check_active_classifiers_update
-BEFORE UPDATE OF kromosoom_kood, koopiaarv_kood, tahendus_kood, paritolu_kood, CNV_seisund_kood ON CNV
+BEFORE UPDATE OF chromosome_code, copy_number_code, interpretation_code, inheritance_code, cnv_status_code ON cnv
 FOR EACH ROW
 BEGIN
-    -- Check Kromosoom only if it changed
+    -- Check chromosome only if it changed
     SELECT RAISE(ABORT, 'BR_CNV_12: Seda kromosoomi väärtust ei saa valida (ei ole aktuaalne või kehtetu).')
-    WHERE NEW.kromosoom_kood IS NOT OLD.kromosoom_kood -- Check only if value changed
+    WHERE NEW.chromosome_code IS NOT OLD.chromosome_code -- Check only if value changed
       AND NOT EXISTS (
-        SELECT 1 FROM Kromosoom
-        WHERE kromosoom_kood = NEW.kromosoom_kood AND on_aktuaalne_Kromosoom = 1
+        SELECT 1 FROM chromosome
+        WHERE chromosome_code = NEW.chromosome_code AND is_active = 1
     );
-    -- Check Koopiaarv only if it changed
+    -- Check copy_number only if it changed
     SELECT RAISE(ABORT, 'BR_CNV_12: Seda koopiaarvu väärtust ei saa valida (ei ole aktuaalne või kehtetu).')
-    WHERE NEW.koopiaarv_kood IS NOT OLD.koopiaarv_kood
+    WHERE NEW.copy_number_code IS NOT OLD.copy_number_code
       AND NOT EXISTS (
-        SELECT 1 FROM Koopiaarv
-        WHERE koopiaarv_kood = NEW.koopiaarv_kood AND on_aktuaalne_Koopiaarv = 1
+        SELECT 1 FROM copy_number
+        WHERE copy_number_code = NEW.copy_number_code AND is_active = 1
     );
-    -- Check Tahendus only if it changed
+    -- Check interpretation only if it changed
     SELECT RAISE(ABORT, 'BR_CNV_12: Seda tahenduse väärtust ei saa valida (ei ole aktuaalne või kehtetu).')
-    WHERE NEW.tahendus_kood IS NOT OLD.tahendus_kood
+    WHERE NEW.interpretation_code IS NOT OLD.interpretation_code
       AND NOT EXISTS (
-        SELECT 1 FROM Tahendus
-        WHERE tahendus_kood = NEW.tahendus_kood AND on_aktuaalne_Tahendus = 1
+        SELECT 1 FROM interpretation
+        WHERE interpretation_code = NEW.interpretation_code AND is_active = 1
     );
-    -- Check Paritolu only if it changed
+    -- Check inheritance only if it changed
     SELECT RAISE(ABORT, 'BR_CNV_12: Seda paritolu väärtust ei saa valida (ei ole aktuaalne või kehtetu).')
-    WHERE NEW.paritolu_kood IS NOT OLD.paritolu_kood
+    WHERE NEW.inheritance_code IS NOT OLD.inheritance_code
       AND NOT EXISTS (
-        SELECT 1 FROM Paritolu
-        WHERE paritolu_kood = NEW.paritolu_kood AND on_aktuaalne_Paritolu = 1
+        SELECT 1 FROM inheritance
+        WHERE inheritance_code = NEW.inheritance_code AND is_active = 1
     );
-    -- Check CNV_seisund only if it changed
+    -- Check cnv_status only if it changed
     -- Note: State transition logic is also handled by other triggers (check_set_artefact, check_activate_cnv)
     -- This adds an extra layer ensuring the target state itself is marked active in its table.
     SELECT RAISE(ABORT, 'BR_CNV_12: Seda CNV_seisundi väärtust ei saa valida (ei ole aktuaalne või kehtetu).')
-    WHERE NEW.CNV_seisund_kood IS NOT OLD.CNV_seisund_kood
+    WHERE NEW.cnv_status_code IS NOT OLD.cnv_status_code
       AND NOT EXISTS (
-        SELECT 1 FROM CNV_seisund
-        WHERE CNV_seisund_kood = NEW.CNV_seisund_kood AND on_aktuaalne_CNV_seisund = 1
+        SELECT 1 FROM cnv_status
+        WHERE cnv_status_code = NEW.cnv_status_code AND is_active = 1
     );
 END;
 ;
@@ -745,225 +745,225 @@ END;
 /* --- SAMPLE DATA --- */
 -- Populate classifiers
 
-INSERT INTO Analyysi_seisund (analyysi_seisund_kood, analyysi_seisund_nimi)
+INSERT INTO analysis_status (analysis_status_code, analysis_status_name)
 VALUES (1, 'aktiivne');
-INSERT INTO Analyysi_seisund (analyysi_seisund_kood, analyysi_seisund_nimi)
+INSERT INTO analysis_status (analysis_status_code, analysis_status_name)
 VALUES (2, 'artefakt');
 
-INSERT INTO Analyysi_tyyp (analyysi_tyyp_kood, analyysi_tyyp_nimi)
+INSERT INTO analysis_type (analysis_type_code, analysis_type_name)
 VALUES (1, 'loode');
-INSERT INTO Analyysi_tyyp (analyysi_tyyp_kood, analyysi_tyyp_nimi)
+INSERT INTO analysis_type (analysis_type_code, analysis_type_name)
 VALUES (2, 'vanem');
-INSERT INTO Analyysi_tyyp (analyysi_tyyp_kood, analyysi_tyyp_nimi)
+INSERT INTO analysis_type (analysis_type_code, analysis_type_name)
 VALUES (3, 'muu_sugulane');
-INSERT INTO Analyysi_tyyp (analyysi_tyyp_kood, analyysi_tyyp_nimi)
+INSERT INTO analysis_type (analysis_type_code, analysis_type_name)
 VALUES (4, 'onko');
-INSERT INTO Analyysi_tyyp (analyysi_tyyp_kood, analyysi_tyyp_nimi)
+INSERT INTO analysis_type (analysis_type_code, analysis_type_name)
 VALUES (5, 'postnataalne');
 
-INSERT INTO Annotatsiooni_seisund (annotatsiooni_seisund_kood, annotatsiooni_seisund_nimi)
+INSERT INTO annotation_status (annotation_status_code, annotation_status_name)
 VALUES (1, 'aktiivne');
-INSERT INTO Annotatsiooni_seisund (annotatsiooni_seisund_kood, annotatsiooni_seisund_nimi)
+INSERT INTO annotation_status (annotation_status_code, annotation_status_name)
 VALUES (2, 'mitteaktiivne');
 
-INSERT INTO Annotatsiooni_tyyp (annotatsiooni_tyyp_kood, annotatsiooni_tyyp_nimi)
+INSERT INTO annotation_type (annotation_type_code, annotation_type_name)
 VALUES (1, 'ACMG_geen');
-INSERT INTO Annotatsiooni_tyyp (annotatsiooni_tyyp_kood, annotatsiooni_tyyp_nimi)
+INSERT INTO annotation_type (annotation_type_code, annotation_type_name)
 VALUES (2, 'OMIM_Morbid_geen');
-INSERT INTO Annotatsiooni_tyyp (annotatsiooni_tyyp_kood, annotatsiooni_tyyp_nimi)
+INSERT INTO annotation_type (annotation_type_code, annotation_type_name)
 VALUES (3, 'sage_CNV');
 
-INSERT INTO CNV_seisund (CNV_seisund_kood, CNV_seisund_nimi)
+INSERT INTO cnv_status (cnv_status_code, cnv_status_name)
 VALUES (1, 'aktiivne');
-INSERT INTO CNV_seisund (CNV_seisund_kood, CNV_seisund_nimi)
+INSERT INTO cnv_status (cnv_status_code, cnv_status_name)
 VALUES (2, 'artefakt');
 
-INSERT INTO DNA_seisund (DNA_seisund_kood, DNA_seisund_nimi)
+INSERT INTO dna_status (dna_status_code, dna_status_name)
 VALUES (1, 'olemas');
-INSERT INTO DNA_seisund (DNA_seisund_kood, DNA_seisund_nimi)
+INSERT INTO dna_status (dna_status_code, dna_status_name)
 VALUES (2, 'puudu');
-INSERT INTO DNA_seisund (DNA_seisund_kood, DNA_seisund_nimi)
+INSERT INTO dna_status (dna_status_code, dna_status_name)
 VALUES (3, 'ebakvaliteetne');
-INSERT INTO DNA_seisund (DNA_seisund_kood, DNA_seisund_nimi)
+INSERT INTO dna_status (dna_status_code, dna_status_name)
 VALUES (4, 'tühistatud');
 
-INSERT INTO Genoomi_versioon (Genoomi_versioon_kood, Genoomi_versioon_nimi)
+INSERT INTO genome_build (genome_build_code, genome_build_name)
 VALUES (1, 'GRCh38');
-INSERT INTO Genoomi_versioon (Genoomi_versioon_kood, Genoomi_versioon_nimi)
+INSERT INTO genome_build (genome_build_code, genome_build_name)
 VALUES (2, 'GRCh37');
 
-INSERT INTO Kasutaja_roll (kasutaja_roll_kood, kasutaja_roll_nimi)
+INSERT INTO user_role (user_role_code, user_role_name)
 VALUES (1, 'administraator');
-INSERT INTO Kasutaja_roll (kasutaja_roll_kood, kasutaja_roll_nimi)
+INSERT INTO user_role (user_role_code, user_role_name)
 VALUES (2, 'laborispetsialist');
-INSERT INTO Kasutaja_roll (kasutaja_roll_kood, kasutaja_roll_nimi)
+INSERT INTO user_role (user_role_code, user_role_name)
 VALUES (3, 'laborant');
-INSERT INTO Kasutaja_roll (kasutaja_roll_kood, kasutaja_roll_nimi)
+INSERT INTO user_role (user_role_code, user_role_name)
 VALUES (4, 'juhataja');
 
-INSERT INTO Kasutaja_seisund (kasutaja_seisund_kood, kasutaja_seisund_nimi)
+INSERT INTO user_status (user_status_code, user_status_name)
 VALUES (1, 'aktiivne');
-INSERT INTO Kasutaja_seisund (kasutaja_seisund_kood, kasutaja_seisund_nimi)
+INSERT INTO user_status (user_status_code, user_status_name)
 VALUES (2, 'mitteaktiivne');
 
-INSERT INTO Kromosoom (kromosoom_kood, kromosoom_nimi) VALUES (1, '1');
-INSERT INTO Kromosoom (kromosoom_kood, kromosoom_nimi) VALUES (2, '2');
-INSERT INTO Kromosoom (kromosoom_kood, kromosoom_nimi) VALUES (3, '3');
-INSERT INTO Kromosoom (kromosoom_kood, kromosoom_nimi) VALUES (4, '4');
-INSERT INTO Kromosoom (kromosoom_kood, kromosoom_nimi) VALUES (5, '5');
-INSERT INTO Kromosoom (kromosoom_kood, kromosoom_nimi) VALUES (6, '6');
-INSERT INTO Kromosoom (kromosoom_kood, kromosoom_nimi) VALUES (7, '7');
-INSERT INTO Kromosoom (kromosoom_kood, kromosoom_nimi) VALUES (8, '8');
-INSERT INTO Kromosoom (kromosoom_kood, kromosoom_nimi) VALUES (9, '9');
-INSERT INTO Kromosoom (kromosoom_kood, kromosoom_nimi) VALUES (10, '10');
-INSERT INTO Kromosoom (kromosoom_kood, kromosoom_nimi) VALUES (11, '11');
-INSERT INTO Kromosoom (kromosoom_kood, kromosoom_nimi) VALUES (12, '12');
-INSERT INTO Kromosoom (kromosoom_kood, kromosoom_nimi) VALUES (13, '13');
-INSERT INTO Kromosoom (kromosoom_kood, kromosoom_nimi) VALUES (14, '14');
-INSERT INTO Kromosoom (kromosoom_kood, kromosoom_nimi) VALUES (15, '15');
-INSERT INTO Kromosoom (kromosoom_kood, kromosoom_nimi) VALUES (16, '16');
-INSERT INTO Kromosoom (kromosoom_kood, kromosoom_nimi) VALUES (17, '17');
-INSERT INTO Kromosoom (kromosoom_kood, kromosoom_nimi) VALUES (18, '18');
-INSERT INTO Kromosoom (kromosoom_kood, kromosoom_nimi) VALUES (19, '19');
-INSERT INTO Kromosoom (kromosoom_kood, kromosoom_nimi) VALUES (20, '20');
-INSERT INTO Kromosoom (kromosoom_kood, kromosoom_nimi) VALUES (21, '21');
-INSERT INTO Kromosoom (kromosoom_kood, kromosoom_nimi) VALUES (22, '22');
-INSERT INTO Kromosoom (kromosoom_kood, kromosoom_nimi) VALUES (23, 'X'); -- Eeldusel, et X kood on 23
-INSERT INTO Kromosoom (kromosoom_kood, kromosoom_nimi) VALUES (24, 'Y');
+INSERT INTO chromosome (chromosome_code, chromosome_name) VALUES (1, '1');
+INSERT INTO chromosome (chromosome_code, chromosome_name) VALUES (2, '2');
+INSERT INTO chromosome (chromosome_code, chromosome_name) VALUES (3, '3');
+INSERT INTO chromosome (chromosome_code, chromosome_name) VALUES (4, '4');
+INSERT INTO chromosome (chromosome_code, chromosome_name) VALUES (5, '5');
+INSERT INTO chromosome (chromosome_code, chromosome_name) VALUES (6, '6');
+INSERT INTO chromosome (chromosome_code, chromosome_name) VALUES (7, '7');
+INSERT INTO chromosome (chromosome_code, chromosome_name) VALUES (8, '8');
+INSERT INTO chromosome (chromosome_code, chromosome_name) VALUES (9, '9');
+INSERT INTO chromosome (chromosome_code, chromosome_name) VALUES (10, '10');
+INSERT INTO chromosome (chromosome_code, chromosome_name) VALUES (11, '11');
+INSERT INTO chromosome (chromosome_code, chromosome_name) VALUES (12, '12');
+INSERT INTO chromosome (chromosome_code, chromosome_name) VALUES (13, '13');
+INSERT INTO chromosome (chromosome_code, chromosome_name) VALUES (14, '14');
+INSERT INTO chromosome (chromosome_code, chromosome_name) VALUES (15, '15');
+INSERT INTO chromosome (chromosome_code, chromosome_name) VALUES (16, '16');
+INSERT INTO chromosome (chromosome_code, chromosome_name) VALUES (17, '17');
+INSERT INTO chromosome (chromosome_code, chromosome_name) VALUES (18, '18');
+INSERT INTO chromosome (chromosome_code, chromosome_name) VALUES (19, '19');
+INSERT INTO chromosome (chromosome_code, chromosome_name) VALUES (20, '20');
+INSERT INTO chromosome (chromosome_code, chromosome_name) VALUES (21, '21');
+INSERT INTO chromosome (chromosome_code, chromosome_name) VALUES (22, '22');
+INSERT INTO chromosome (chromosome_code, chromosome_name) VALUES (23, 'X'); -- Assuming X code is 23
+INSERT INTO chromosome (chromosome_code, chromosome_name) VALUES (24, 'Y');
 
-INSERT INTO Koopiaarv (koopiaarv_kood, koopiaarv_vaartus, koopiaarv_nimi, RGB_varv)
+INSERT INTO copy_number (copy_number_code, copy_number_value, copy_number_name, rgb_color)
 VALUES (0, 0, 'hmz_del', '139,0,0');
-INSERT INTO Koopiaarv (koopiaarv_kood, koopiaarv_vaartus, koopiaarv_nimi, RGB_varv)
+INSERT INTO copy_number (copy_number_code, copy_number_value, copy_number_name, rgb_color)
 VALUES (1, 1, 'del', '255,0,0');
-INSERT INTO Koopiaarv (koopiaarv_kood, koopiaarv_vaartus, koopiaarv_nimi, RGB_varv)
+INSERT INTO copy_number (copy_number_code, copy_number_value, copy_number_name, rgb_color)
 VALUES (2, 2, 'norm', '160,32,140');
-INSERT INTO Koopiaarv (koopiaarv_kood, koopiaarv_vaartus, koopiaarv_nimi, RGB_varv)
+INSERT INTO copy_number (copy_number_code, copy_number_value, copy_number_name, rgb_color)
 VALUES (3, 3, 'dup', '0,0,255');
-INSERT INTO Koopiaarv (koopiaarv_kood, koopiaarv_vaartus, koopiaarv_nimi, RGB_varv)
+INSERT INTO copy_number (copy_number_code, copy_number_value, copy_number_name, rgb_color)
 VALUES (4, 4, '4', '0,0,139');
 
-INSERT INTO Partii_seisund (partii_seisund_kood, partii_seisund_nimi)
+INSERT INTO batch_status (batch_status_code, batch_status_name)
 VALUES (1, 'aktiivne');
-INSERT INTO Partii_seisund (partii_seisund_kood, partii_seisund_nimi)
+INSERT INTO batch_status (batch_status_code, batch_status_name)
 VALUES (2, 'ootel');
-INSERT INTO Partii_seisund (partii_seisund_kood, partii_seisund_nimi)
+INSERT INTO batch_status (batch_status_code, batch_status_name)
 VALUES (3, 'analüüsitud');
 
-INSERT INTO Patsiendi_seisund (patsiendi_seisund_kood, patsiendi_seisund_nimi)
+INSERT INTO patient_status (patient_status_code, patient_status_name)
 VALUES (1, 'aktiivne');
-INSERT INTO Patsiendi_seisund (patsiendi_seisund_kood, patsiendi_seisund_nimi)
+INSERT INTO patient_status (patient_status_code, patient_status_name)
 VALUES (2, 'mitteaktiivne');
 
-INSERT INTO Plaadi_seisund (plaadi_seisund_kood, plaadi_seisund_nimi)
+INSERT INTO plate_status (plate_status_code, plate_status_name)
 VALUES (1, 'aktiivne');
-INSERT INTO Plaadi_seisund (plaadi_seisund_kood, plaadi_seisund_nimi)
+INSERT INTO plate_status (plate_status_code, plate_status_name)
 VALUES (2, 'ootel');
-INSERT INTO Plaadi_seisund (plaadi_seisund_kood, plaadi_seisund_nimi)
+INSERT INTO plate_status (plate_status_code, plate_status_name)
 VALUES (3, 'analüüsitud');
 
-INSERT INTO Positsioon_karbis (positsioon_karbis_kood, positsioon_karbis_nimi)
+INSERT INTO box_position (box_position_code, box_position_name)
 VALUES (1, 'A11');
-INSERT INTO Positsioon_karbis (positsioon_karbis_kood, positsioon_karbis_nimi)
+INSERT INTO box_position (box_position_code, box_position_name)
 VALUES (2, 'A12');
 
-INSERT INTO Positsioon_plaadil (positsioon_plaadil_kood, positsioon_plaadil_nimi)
+INSERT INTO plate_position (plate_position_code, plate_position_name)
 VALUES (1,'R01C01');
-INSERT INTO Positsioon_plaadil (positsioon_plaadil_kood, positsioon_plaadil_nimi)
+INSERT INTO plate_position (plate_position_code, plate_position_name)
 VALUES (2,'R02C01');
-INSERT INTO Positsioon_plaadil (positsioon_plaadil_kood, positsioon_plaadil_nimi)
+INSERT INTO plate_position (plate_position_code, plate_position_name)
 VALUES (3,'R03C01');
-INSERT INTO Positsioon_plaadil (positsioon_plaadil_kood, positsioon_plaadil_nimi)
+INSERT INTO plate_position (plate_position_code, plate_position_name)
 VALUES (4,'R04C01');
-INSERT INTO Positsioon_plaadil (positsioon_plaadil_kood, positsioon_plaadil_nimi)
+INSERT INTO plate_position (plate_position_code, plate_position_name)
 VALUES (5,'R05C01');
-INSERT INTO Positsioon_plaadil (positsioon_plaadil_kood, positsioon_plaadil_nimi)
+INSERT INTO plate_position (plate_position_code, plate_position_name)
 VALUES (6,'R06C01');
-INSERT INTO Positsioon_plaadil (positsioon_plaadil_kood, positsioon_plaadil_nimi)
+INSERT INTO plate_position (plate_position_code, plate_position_name)
 VALUES (7,'R07C01');
-INSERT INTO Positsioon_plaadil (positsioon_plaadil_kood, positsioon_plaadil_nimi)
+INSERT INTO plate_position (plate_position_code, plate_position_name)
 VALUES (8,'R08C01');
 
-INSERT INTO Paritolu (paritolu_kood, paritolu_nimi)
+INSERT INTO inheritance (inheritance_code, inheritance_name)
 VALUES (1, 'teadmata');
-INSERT INTO Paritolu (paritolu_kood, paritolu_nimi)
+INSERT INTO inheritance (inheritance_code, inheritance_name)
 VALUES (2, 'dn');
-INSERT INTO Paritolu (paritolu_kood, paritolu_nimi)
+INSERT INTO inheritance (inheritance_code, inheritance_name)
 VALUES (3, 'pat');
-INSERT INTO Paritolu (paritolu_kood, paritolu_nimi)
+INSERT INTO inheritance (inheritance_code, inheritance_name)
 VALUES (4, 'mat');
-INSERT INTO Paritolu (paritolu_kood, paritolu_nimi)
+INSERT INTO inheritance (inheritance_code, inheritance_name)
 VALUES (5, 'inh');
 
-INSERT INTO Server (server_kood, server_nimi)
+INSERT INTO server (server_code, server_name)
 VALUES (1, '\\geneetika\Illumina_tsütokiip');
 
-INSERT INTO Tahendus (tahendus_kood, tahendus_nimi)
+INSERT INTO interpretation (interpretation_code, interpretation_name)
 VALUES (1, 'teadmata');
-INSERT INTO Tahendus (tahendus_kood, tahendus_nimi)
+INSERT INTO interpretation (interpretation_code, interpretation_name)
 VALUES (2, 'patogeenne');
-INSERT INTO Tahendus (tahendus_kood, tahendus_nimi)
+INSERT INTO interpretation (interpretation_code, interpretation_name)
 VALUES (3, 'tõen_patogeenne');
-INSERT INTO Tahendus (tahendus_kood, tahendus_nimi)
+INSERT INTO interpretation (interpretation_code, interpretation_name)
 VALUES (4, 'VUS');
-INSERT INTO Tahendus (tahendus_kood, tahendus_nimi)
+INSERT INTO interpretation (interpretation_code, interpretation_name)
 VALUES (5, 'tõen_tähenduseta');
-INSERT INTO Tahendus (tahendus_kood, tahendus_nimi)
+INSERT INTO interpretation (interpretation_code, interpretation_name)
 VALUES (6, 'tähenduseta');
-INSERT INTO Tahendus (tahendus_kood, tahendus_nimi)
+INSERT INTO interpretation (interpretation_code, interpretation_name)
 VALUES (7, 'LOH');
 
 -- Populate other tables
 
-INSERT INTO Patsient (isikukood, nimi)
+INSERT INTO patient (personal_code, name)
 VALUES (49505051221, 'Mari Maasikas');
 
-INSERT INTO Patsient (isikukood, nimi)
+INSERT INTO patient (personal_code, name)
 VALUES (48505051221, 'Veera Vaarikas (loode)');
 
-INSERT INTO Kasutaja (meiliaadress, parool, kasutaja_roll_kood, kasutaja_seisund_kood, kasutaja_reg_aeg)
+INSERT INTO user (email, password, user_role_code, user_status_code, user_registered_at)
 VALUES ('admin@lab.ee', 'secret_pw', 2, 1, '2025-05-08');
 
-INSERT INTO Kasutaja (meiliaadress, parool, kasutaja_roll_kood, kasutaja_seisund_kood, kasutaja_reg_aeg)
+INSERT INTO user (email, password, user_role_code, user_status_code, user_registered_at)
 VALUES ('user@lab.ee', 'user_pw', 1, 1, '2025-05-08');
 
-INSERT INTO DNA (DNA_kood, patsient_id, DNA_karp, positsioon_karbis_kood, DNA_kontsentratsioon, dna_seisund_kood)
+INSERT INTO dna (dna_code, patient_id, dna_box, box_position_code, dna_concentration, dna_status_code)
 VALUES ('E03131314', 1, 225, 1, 342, 1);
 
-INSERT INTO DNA (DNA_kood, patsient_id, DNA_karp, positsioon_karbis_kood, DNA_kontsentratsioon, dna_seisund_kood)
+INSERT INTO dna (dna_code, patient_id, dna_box, box_position_code, dna_concentration, dna_status_code)
 VALUES ('E03131315', 2, 226, 2, 222, 1);
 
-INSERT INTO Partii (partii_kaust, server_kood, partii_seisund_kood)
+INSERT INTO batch (batch_folder, server_code, batch_status_code)
 VALUES ('GDAkiip_261_02_05_2025', 1, 1);
 
-INSERT INTO Plaat (plaadi_kood, seerianumber, partii_id, plaadi_seisund_kood)
+INSERT INTO plate (plate_code, serial_number, batch_id, plate_status_code)
 VALUES (261, '209182480124', 1, 1);
 
-INSERT INTO Plaat (plaadi_kood, seerianumber, partii_id, plaadi_seisund_kood)
+INSERT INTO plate (plate_code, serial_number, batch_id, plate_status_code)
 VALUES (262, '209182480125', 1, 1);
 
-INSERT INTO Analyys (analyysi_tyyp_kood, analyysi_seisund_kood, positsioon_plaadil_kood,
-                     naidustus, kasutaja_id, dna_id, plaat_id)
+INSERT INTO analysis (analysis_type_code, analysis_status_code, plate_position_code,
+                     indication, user_id, dna_id, plate_id)
 VALUES (5, 1, 1, 'Primaarne viljatus', 1, 1, 1);
 
-INSERT INTO Analyys (analyysi_tyyp_kood, analyysi_seisund_kood, positsioon_plaadil_kood,
-                     naidustus, kasutaja_id, dna_id, plaat_id)
+INSERT INTO analysis (analysis_type_code, analysis_status_code, plate_position_code,
+                     indication, user_id, dna_id, plate_id)
 VALUES (5, 1, 2, 'Epilepsia', 1, 2, 2);
 
-INSERT INTO Annotatsioon (annotatsiooni_tyyp_kood, kromosoom_kood, alguskoordinaat, loppkoordinaat,
-                          koopiaarv_kood, tahendus_kood)
+INSERT INTO annotation (annotation_type_code, chromosome_code, start_pos, end_pos,
+                          copy_number_code, interpretation_code)
 VALUES (1, 23, 624344,659411,2, 1);
 
-INSERT INTO CNV (analyys_id, kromosoom_kood, alguskoordinaat, loppkoordinaat,
-                 koopiaarv_kood, tahendus_kood)
+INSERT INTO cnv (analysis_id, chromosome_code, start_pos, end_pos,
+                 copy_number_code, interpretation_code)
 VALUES (1, 23, 600344, 6600111, 1, 2);
 
-INSERT INTO CNV (analyys_id, kromosoom_kood, alguskoordinaat, loppkoordinaat,
-                 koopiaarv_kood, tahendus_kood)
+INSERT INTO cnv (analysis_id, chromosome_code, start_pos, end_pos,
+                 copy_number_code, interpretation_code)
 VALUES (1, 2, 1, 3000000, 3, 1);
 
-INSERT INTO CNV (analyys_id, kromosoom_kood, alguskoordinaat, loppkoordinaat,
-                 koopiaarv_kood, tahendus_kood)
+INSERT INTO cnv (analysis_id, chromosome_code, start_pos, end_pos,
+                 copy_number_code, interpretation_code)
 VALUES (2, 3, 500, 2000000, 2, 7);
 
-INSERT INTO CNV_annotatsioon (cnv_id, annotatsioon_id)
+INSERT INTO cnv_annotation (cnv_id, annotation_id)
 VALUES (1, 1);

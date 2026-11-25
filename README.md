@@ -1,40 +1,50 @@
-# CNV Register lokaalseks kasutamiseks
+# CNV register
 
-Töölaua rakendus, mis kasutab Pythonit, Tkinterit ja SQLite'i Koopiaarvu muutuste (CNV) andmete haldamiseks.
+Desktop application (Python, Tkinter, SQLite) for managing copy number variant (CNV) data.
 
-## Eeltingimused
+Goal: a local database of CNVs from Illumina SNP array data, exported as BED.
 
-*   Python 
-*   Tkinter ja `sqlite3` on Pythoni standardselt kaasas
+The user interface is in Estonian; code, database schema and documentation are in English.
 
-## Seadistamine ja käivitamine
+## Requirements
 
-### Variant 1. Käivita käsureal
+*   Python 3.8 or newer (Tkinter and `sqlite3` are included in the standard library)
 
-1.  **Veendu, et kõik projekti failid** (`cnv_admin_gui.py`, `cnv_register_db.py`, `Registrid_cleaned.sql`) asuvad samas kaustas.
-2.  **Andmebaasi loomine:** Ava terminal/käsurida projekti kaustas (näiteks kirjutades Windowsi arvutis aadressiribale cmd) ja käivita:
+## Setup and running
+
+### Option 1. Command line
+
+1.  Clone the repository: `git clone https://github.com/kadijairus/cnv_registry_sqlite.git`
+2.  **Create the database:** open a terminal in the project folder (on Windows, e.g. type `cmd` in the Explorer address bar) and run:
     ```bash
-    python cnv_register_db.py
+    python cnv_registry_db.py
     ```
-    *   See loob `cnv_register.db` faili kohalikule kettale (`C:\Users\<kasutaja>\cnv_register\`), kasutades `Registrid_cleaned.sql` failis olevat skeemi.
-    *   Kui andmebaas on juba olemas, küsitakse kinnitust (`JAH`) ja enne ülekirjutamist tehakse varukoopia.
-3.  **Rakenduse käivitamine:** Käivita põhirakenduse skript:
+    *   Creates `cnv_registry.db` on the local disk (`C:\Users\<user>\cnv_registry\`).
+    *   `Registrid_cleaned.sql` contains the schema and a small amount of demo data.
+    *   If the database already exists, you are asked to confirm (`YES`) and a backup is made before it is overwritten.
+3.  **Start the application:**
     ```bash
     python cnv_admin_gui.py
     ```
-### Variant 2. Käivita PyCharmis
 
-1. **Käivita PyCharm**
-2. Veendu, et sul on ligipääs projektile, seejärel Git clone URL: https://gitlab.cs.taltech.ee/kadi.jairus/iti0206_csv.git
-3. **Andmebaasi loomine:** Käivita esmalt `cnv_register_db.py`
-4. **Rakenduse käivitamine:** Käivita `cnv_admin_gui.py`
+![alt text](image.png)
 
-## Märkused
+### Option 2. PyCharm
 
-*   **Andmebaasi lähtestamine:** Uuesti alustamiseks käivita `python cnv_register_db.py`. Olemasolev `cnv_register.db` fail kustutatakse pärast kinnitust ja varukoopiat ning luuakse uuesti.
-*   **Varukoopiad:** `cnv_backup.py` teeb kontrollitud varukoopia kausta `U:\cnv_register_backups` (muudetav failis `BACKUP_DIR`).
-    *   Automaatselt: rakenduse sulgemisel üks kord päevas ja enne andmebaasi ülekirjutamist.
-    *   Käsitsi: `python cnv_backup.py`.
-    *   Alles hoitakse 30 viimast koopiat ja iga kuu esimene koopia.
-*   **Versioonihaldus:** Ära lisa `cnv_register.db` faili Giti. Lisa `*.db` oma `.gitignore` faili.
-*   **Andmebaasi vaatamine (valikuline):** Faili `cnv_register.db` sisu saab vaadata mistahes standardse SQLite'i andmebaasibrauseriga (nt DB Browser for SQLite).
+1.  File → Project from Version Control → URL: `https://github.com/kadijairus/cnv_registry_sqlite.git`
+2.  Run `cnv_registry_db.py` first, then `cnv_admin_gui.py`.
+
+## Usage
+
+*   View CNVs by DNA code, add and edit CNVs, mark them as active or artefact.
+*   Export active CNVs as a BED file (GRCh38).
+
+## Notes
+
+*   **Resetting the database:** to start over, run `python cnv_registry_db.py`. The existing `cnv_registry.db` is deleted after confirmation and a backup, and then rebuilt.
+*   **Backups:** `cnv_backup.py` makes a verified backup in `U:\cnv_registry_backups` (change `BACKUP_DIR` in the file).
+    *   Automatically: once a day when the application is closed, and before the database is overwritten.
+    *   Manually: `python cnv_backup.py`.
+    *   The 30 most recent backups and the first backup of each month are kept.
+*   **Version control:** databases, Excel and BED files are excluded from git by `.gitignore` – patient data does not go into git.
+*   **Browsing the database (optional):** the contents of `cnv_registry.db` can be viewed with any SQLite browser (e.g. DB Browser for SQLite).

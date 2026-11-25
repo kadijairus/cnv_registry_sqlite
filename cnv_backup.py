@@ -14,11 +14,11 @@ import sqlite3
 import sys
 from datetime import datetime
 
-import cnv_register_db as db
+import cnv_registry_db as db
 
-BACKUP_DIR = r"U:\cnv_register_backups"
+BACKUP_DIR = r"U:\cnv_registry_backups"
 KEEP_LATEST = 30
-BACKUP_NAME_RE = re.compile(r"^cnv_register_(\d{4}-\d{2}-\d{2})_(\d{6})(?:_[\w-]+)?\.db$")
+BACKUP_NAME_RE = re.compile(r"^cnv_registry_(\d{4}-\d{2}-\d{2})_(\d{6})(?:_[\w-]+)?\.db$")
 
 
 def list_backups(backup_dir=BACKUP_DIR):
@@ -72,7 +72,7 @@ def backup_database(db_path=db.DB_FILE, backup_dir=BACKUP_DIR, reason=None):
 
     stamp = datetime.now().strftime("%Y-%m-%d_%H%M%S")
     suffix = f"_{re.sub(r'[^A-Za-z0-9-]', '-', reason)}" if reason else ""
-    backup_path = os.path.join(backup_dir, f"cnv_register_{stamp}{suffix}.db")
+    backup_path = os.path.join(backup_dir, f"cnv_registry_{stamp}{suffix}.db")
 
     source = target = None
     try:
